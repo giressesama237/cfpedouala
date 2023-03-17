@@ -24,11 +24,11 @@
                         <tr>
                             <th><div><?php echo get_phrase('class');?></div></th>
                             <th><div><?php echo get_phrase('section');?></div></th>
-                            <th><div><?php echo get_phrase('subject_name');?></div></th>
+                            <th><div><?php echo get_phrase('module');?></div></th>
                             
 
-                            <th><div><?php echo get_phrase('subject_coef');?></div></th>
-                            <th><div><?php echo get_phrase('subject_type');?></div></th>
+                            <th><div><?php echo get_phrase('code');?></div></th>
+                            <th><div><?php echo get_phrase('type');?></div></th>
                             <th><div><?php echo get_phrase('teacher');?></div></th>
                             <th><div><?php echo get_phrase('options');?></div></th>
                         </tr>
@@ -40,15 +40,15 @@
                             <td><?php echo $this->crud_model->get_type_name_by_id('class',$row['class_id']);?></td>
                             <td><?php echo $this->crud_model->get_type_name_by_id('section',$row['section_id']);?></td>
                             <td><?php echo $row['name'];?></td>
-                            <td><?php echo $row['coef'];?></td>
+                            <td><?php echo $row['code'];?></td>
                             <td><?php if ($row['type_id'] == 1) {
-                                echo "Arts Subjects";
+                                echo "TC GENERAUX";
                                 }
                                 if ($row['type_id'] == 2) {
-                                echo "Science Subjects";
+                                echo "TC TECHNNIQUE";
                                 }
                                 if ($row['type_id'] == 3) {
-                                echo "Others";
+                                echo "PROFESSIONNEL";
                                 }
                                  ?></td>
                             <td><?php echo $this->crud_model->get_type_name_by_id('teacher',$row['teacher_id']).' '. $this->db->get_where('teacher',array('teacher_id'=>$row['teacher_id']))->row()->surname;?></td>
@@ -93,17 +93,23 @@
                     <div class="padded">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label"><?php echo get_phrase('subject_name');?></label>
+                                <label class="col-sm-3 control-label"><?php echo get_phrase('module');?></label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="name" data-validate="required" data-message-required="<?php echo get_phrase('value_required');?>"/>
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-sm-3 control-label"><?php echo get_phrase('code');?></label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="code" data-validate="required" data-message-required="<?php echo get_phrase('value_required');?>"/>
+                                </div>
+                            </div>
+                            <!--<div class="form-group">
                                 <label class="col-sm-3 control-label"><?php echo get_phrase('subject_coef');?></label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="coef" data-validate="required" data-message-required="<?php echo get_phrase('value_required');?>"/>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><?php echo get_phrase('subject_type');?></label>
                                 <div class="col-sm-9">

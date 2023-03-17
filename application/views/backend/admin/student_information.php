@@ -37,9 +37,11 @@
         		<tr>
         			<th width="40"><div><?php echo get_phrase('id');?></div></th>
             		<th><div><?php echo get_phrase('student_code');?></div></th>
-            		<th><div><?php echo get_phrase('folder');?></div></th>
                     <th><div><?php echo get_phrase('photo');?></div></th>
                     <th><div><?php echo get_phrase('Name');?></div></th>
+            		<th><div><?php echo get_phrase('Birthdate');?></div></th>
+            		<th><div><?php echo get_phrase('at');?></div></th>
+
                     <th><div><?php echo get_phrase('class');?></div></th>
                     <th><div><?php echo get_phrase('contact');?></div></th>
             		<th><div><?php echo get_phrase('options');?></div></th>
@@ -65,10 +67,11 @@
             },
             "columns": [
                 { "data": "student_id" },
-                { "data": "student_id" },
-                { "data": "student_id" },
+                { "data": "student_code" },
                 { "data": "photo" },
                 { "data": "student" },
+                { "data": "date" },
+                { "data": "at" },
                 { "data": "class" },
                 { "data": "contact" },
                 { "data": "options" },

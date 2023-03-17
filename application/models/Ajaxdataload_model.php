@@ -392,15 +392,20 @@ class Ajaxdataload_model extends CI_Model
     function all_student_count($year, $class_id, $section_id = null)
     {
         if (!is_null($section_id))
-            $array = array(
+            /*$array = array(
                 'i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id,
+                'e.section_id' => $section_id
+            );*/
+            $array = array(
+                'e.year' => $year, "e.class_id" => $class_id,
                 'e.section_id' => $section_id
             );
         else
-            $array = array('i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id);
+            //$array = array('i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id);
+            $array = array('e.year' => $year, "e.class_id" => $class_id);
         $query = $this
             ->db
-            ->join('invoice as i', 'i.student_id = e.student_id')
+            //->join('invoice as i', 'i.student_id = e.student_id')
             ->where($array)
             ->group_by('e.student_id')
             ->get('enroll as e');
@@ -411,17 +416,22 @@ class Ajaxdataload_model extends CI_Model
     function all_student($limit, $start, $col, $dir, $year, $class_id, $section_id = null)
     {
         if (!is_null($section_id))
-            $array = array(
+            /*$array = array(
                 'i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id,
+                'e.section_id' => $section_id
+            );*/
+            $array = array(
+                'e.year' => $year, "e.class_id" => $class_id,
                 'e.section_id' => $section_id
             );
         else
-            $array = array('i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id);
+            //$array = array('i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id);
+            $array = array('e.year' => $year, "e.class_id" => $class_id);
         $query = $this
             ->db
             ->select('e.class_id,e.section_id,s.*')
             ->join('enroll as e', 'e.student_id = s.student_id')
-            ->join('invoice as i', 'i.student_id = s.student_id')
+            //->join('invoice as i', 'i.student_id = s.student_id')
             ->where($array)
             ->limit($limit, $start)
             ->order_by($col, $dir)
@@ -447,12 +457,17 @@ class Ajaxdataload_model extends CI_Model
                 ->order_by($col, $dir)
                 ->get('invoice');*/
         if (!is_null($section_id))
-            $array = array(
+            /*$array = array(
                 'i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id,
+                'e.section_id' => $section_id
+            );*/
+            $array = array(
+                'e.year' => $year, "e.class_id" => $class_id,
                 'e.section_id' => $section_id
             );
         else
-            $array = array('i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id);
+            //$array = array('i.year' => $year, 'e.year' => $year, "e.class_id" => $class_id);
+            $array = array('e.year' => $year, "e.class_id" => $class_id);
         $query = $this
             ->db
             ->select('e.class_id,e.section_id,s.*')
@@ -462,8 +477,8 @@ class Ajaxdataload_model extends CI_Model
                 's.name' => $search, 's.surname' => $search, 's.student_code' => $search, 's.num_dossier' => $search
             ))
             ->group_end()
-            ->join('invoice as i', 's.student_id = i.student_id')
-            ->join('enroll as e', 'e.student_id = i.student_id')
+            //->join('invoice as i', 's.student_id = i.student_id')
+            ->join('enroll as e', 'e.student_id = s.student_id')
             ->where($array)
             ->limit($limit, $start)
             ->group_by('s.student_id')
@@ -480,10 +495,13 @@ class Ajaxdataload_model extends CI_Model
     function student_search_count($search, $year, $class_id, $section_id = null)
     {
         if (!is_null($section_id))
-            $array = array('i.year' => $year,'e.year'=>$year, "e.class_id"=>$class_id,
+            /*$array = array('i.year' => $year,'e.year'=>$year, "e.class_id"=>$class_id,
+         'e.section_id'=>$section_id);*/
+         $array = array('e.year'=>$year, "e.class_id"=>$class_id,
          'e.section_id'=>$section_id);
          else 
-            $array = array('i.year' => $year,'e.year'=>$year, "e.class_id"=>$class_id);
+            //$array = array('i.year' => $year,'e.year'=>$year, "e.class_id"=>$class_id);
+            $array = array('e.year'=>$year, "e.class_id"=>$class_id);
         $query = $this
             ->db
             ->group_start()
@@ -492,10 +510,10 @@ class Ajaxdataload_model extends CI_Model
                 's.name' => $search, 's.surname' => $search, 's.student_code' => $search, 's.num_dossier' => $search
             ))
             ->group_end()
-            ->join('invoice as i', 's.student_id = i.student_id')
-            ->join('enroll as e', 'e.student_id = i.student_id')
+            //->join('invoice as i', 's.student_id = i.student_id')
+            ->join('enroll as e', 'e.student_id = s.student_id')
             ->where($array)
-            ->where(array('i.year' => $year))
+            //->where(array('i.year' => $year))
             ->group_by('s.student_id')
             ->get('student as s');
 

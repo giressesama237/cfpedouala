@@ -14,15 +14,15 @@ foreach ( $edit_data as $row):
             <div class="panel-body">
                 <?php echo form_open(site_url('admin/subject/do_update/'.$row['subject_id']) , array('class' => 'form-horizontal form-groups-bordered validate','target'=>'_top'));?>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label"><?php echo get_phrase('name');?></label>
+                    <label class="col-sm-3 control-label"><?php echo get_phrase('module');?></label>
                     <div class="col-sm-5 controls">
                         <input type="text" class="form-control" name="name" value="<?php echo $row['name'];?>" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label"><?php echo get_phrase('subject_coef');?></label>
+                    <label class="col-sm-3 control-label"><?php echo get_phrase('code');?></label>
                     <div class="col-sm-5 controls">
-                        <input type="text" class="form-control" name="coef" value="<?php echo $row['coef'];?>" required/>
+                        <input type="text" class="form-control" name="code" value="<?php echo $row['code'];?>" required/>
                     </div>
                 </div>
                 <div class="form-group">

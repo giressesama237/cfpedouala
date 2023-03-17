@@ -135,11 +135,11 @@ if ( ! function_exists('duplication_of_class_routine_on_edit')){
 
 //student id duplication on insert
 if ( ! function_exists('code_validation_insert')){
-    function code_validation_insert($num_dossier){
+    function code_validation_insert($code){
         $ci=& get_instance();
         $num_rows = 0;
 
-        $num_rows = $ci->db->get_where('student',array('num_dossier'=>$num_dossier))->num_rows();
+        $num_rows = $ci->db->get_where('student',array('student_code'=>$code))->num_rows();
         if($num_rows == 0){
             return true;
         }

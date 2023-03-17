@@ -254,10 +254,14 @@ class Admin extends CI_Controller
                 $nestedData['student_id'] = $row->student_id;
                 $nestedData['student_code'] = $row->student_code;
                 $nestedData['student_folder'] = $row->num_dossier;
+                $nestedData['date'] = date('d/m/Y',strtotime($row->birthday));
+                $nestedData['at'] = $row->at;
+
+
                 $nestedData['photo'] = "<img src=\"$url \" class=\"img-circle\" width=\"30\" />";
                 $nestedData['student'] = $row->name . ' ' . $row->surname;
                 $nestedData['class'] = $class_name . ' ' . $section_name;
-                $nestedData['contact'] =  $row->address;
+                $nestedData['contact'] =  $row->phone;
                 $nestedData['options'] = $options;
 
                 $data[] = $nestedData;
@@ -1122,6 +1126,68 @@ class Admin extends CI_Controller
         $page_data['page_title'] = get_phrase('manage_teacher');
         $this->load->view('backend/index', $page_data);
     }
+    /**
+     * add bullk teacher with csv
+     * 
+     */
+    function teacher_bulk_add()
+    {
+        if ($this->session->userdata('admin_login') != 1)
+            redirect(site_url('login'), 'refresh');
+        $page_data['page_name']  = 'teacher_bulk_add';
+        $page_data['page_title'] = get_phrase('add_bulk_teacher');
+        $this->load->view('backend/index', $page_data);
+    }
+    function bulk_teacher_add_using_csv($param1 = '')
+    {
+
+        if ($this->session->userdata('admin_login') != 1)
+            redirect(site_url('login'), 'refresh');
+        $admin_id = $this->session->userdata('admin_id');
+        $running_year       =   $this->db->get_where('session', array('admin_id' => $admin_id))->row()->year;
+
+        if ($param1 == 'import') {
+            //if ($this->input->post('class_id') != '' && $this->input->post('section_id') != '') {
+
+                move_uploaded_file($_FILES['userfile']['tmp_name'], 'uploads/bulk_teacher.csv');
+                $csv = array_map('str_getcsv', file('uploads/bulk_teacher.csv'));
+                $count = 1;
+                $array_size = sizeof($csv);
+                var_dump($csv);
+                //die();
+                foreach ($csv as $row) {
+                    if ($count == 1) {
+                        $count++;
+                        continue;
+                    }
+                   // $password = $row[3];
+                    $name=$data['name']      = $row[0];
+                    $surname=$data['surname']      = $row[1];
+                    $data['birthday']      = $row[2];
+                    $data['at']      = $row[3];
+                    $data['sex']      = $row[4];
+                    $data['higher_diploma']      = $row[5];
+                    $data['speciality']      = $row[6];
+                    $data['statut']      = $row[7];
+                    $data['address']      = $row[8];
+                    $data['phone']      = $row[9];
+                    $name1 = explode(' ', $name);
+                    $surname1 = explode(' ', $surname);
+                    $data['email'] = strtolower($name1[0]) . '' . strtolower($surname1[0]) .
+                     '@cfpedouala.com';
+                    $data['password'] = sha1('123456');
+                    //$validation = email_validation($data['email']);
+                    //if ($validation == 1) {
+                        $this->db->insert('teacher', $data);
+                    //} else {
+                        //$this->session->set_flashdata('error_message', get_phrase('this_email_id_is_not_available'));
+                    //}
+                }
+                $this->session->set_flashdata('flash_message', get_phrase('teachers_imported'));
+                redirect(site_url('admin/teacher'), 'refresh');
+            //}
+        }
+    }
 
     function get_teachers()
     {
@@ -1204,7 +1270,8 @@ class Admin extends CI_Controller
         $running_year       =   $this->db->get_where('session', array('admin_id' => $admin_id))->row()->year;
         if ($param1 == 'create') {
             $data['name']       = html_escape($this->input->post('name'));
-            $data['coef']       = html_escape($this->input->post('coef'));
+            //$data['coef']       = html_escape($this->input->post('coef'));
+            $data['code']       = html_escape($this->input->post('code'));
             $data['section_id'] = html_escape($this->input->post('section_id'));
             // $data['subject_type'] = array('1' =>'Arts Subjects' ,'2'=>'Science Subject', '3'=>'Others');
             $data['class_id']   = $this->input->post('class_id');
@@ -1219,7 +1286,7 @@ class Admin extends CI_Controller
             redirect(site_url('admin/subject/' . $data['class_id']), 'refresh');
         }
         if ($param1 == 'do_update') {
-            $data['coef']       = html_escape($this->input->post('coef'));
+            $data['code']       = html_escape($this->input->post('code'));
             $data['type_id']   = $this->input->post('type_id');
             $data['name']       = html_escape($this->input->post('name'));
             $section_id = $data['section_id']       = html_escape($this->input->post('section_id'));
@@ -4225,33 +4292,49 @@ class Admin extends CI_Controller
                 $csv = array_map('str_getcsv', file('uploads/bulk_student.csv'));
                 $count = 1;
                 $array_size = sizeof($csv);
-                var_dump($csv);
-                die();
+                //var_dump($csv);
+                //die();
                 foreach ($csv as $row) {
                     if ($count == 1) {
                         $count++;
                         continue;
                     }
-                    $password = $row[3];
+                   // $password = $row[3];
 
-                    $data['name']      = $row[0];
-                    $data['student_code']  = $row[1];
-                    $data['email']     = $row[2];
-                    $data['password']  = sha1($row[3]);
-                    $data['phone']     = $row[4];
-                    $data['address']   = $row[5];
-                    $data['parent_id'] = $row[6];
-                    $data['sex']       = strtolower($row[7]);
+                    $data['student_code']  = $row[0];
+                    $data['name']      = $row[1];
+                    $data['surname']      = $row[2];
+                    $data['num_dossier']      = $row[3];
+                    $data['birthday']      = $row[4];
+                    $data['at']      = $row[5];
+                    $data['year']      = $running_year;
+
+                    $data['sex']      = $row[6];
+                    $data['phone']      = $row[7];
+                    $data['address']      = $row[8];
+
+
+
+
+                    //$data['email']     = $row[9];
+                    //$data['password']  = sha1($row[3]);
+                    //$data['phone']     = $row[4];
+                    //$date =  date('d-m-y H:i:s');
+
+                    //$data['address']   = $row[5];
+                    //$data['parent_id'] = $row[6];
+                    //$data['sex']       = strtolower($row[7]);
                     //student id (code) validation
                     $code_validation = code_validation_insert($data['student_code']);
                     if (!$code_validation) {
                         $this->session->set_flashdata('error_message', get_phrase('this_id_no_is_not_available'));
                         redirect(site_url('admin/student_add'), 'refresh');
                     }
+                    //var_dump($data);die();
                     //student id validation ends
 
-                    $validation = email_validation($data['email']);
-                    if ($validation == 1) {
+                    //$validation = email_validation($data['email']);
+                    //if ($validation == 1) {
                         $this->db->insert('student', $data);
                         $student_id = $this->db->insert_id();
 
@@ -4263,14 +4346,14 @@ class Admin extends CI_Controller
                         $data2['date_added']  =   strtotime(date("Y-m-d H:i:s"));
                         $data2['year']        =   $running_year;
                         $this->db->insert('enroll', $data2);
-                    } else {
+                    /*} else {
                         if ($array_size == 2) {
                             $this->session->set_flashdata('error_message', get_phrase('this_email_id_"') . $data['email'] . get_phrase('"_is_not_available'));
                             redirect(site_url('admin/student_bulk_add'), 'refresh');
                         } elseif ($array_size > 2) {
                             $this->session->set_flashdata('error_message', get_phrase('some_email_IDs_are_not_available'));
                         }
-                    }
+                    }*/
                 }
 
 

@@ -4,6 +4,11 @@
                 <i class="entypo-plus-circled"></i>
                 <?php echo get_phrase('add_new_teacher');?>
                 </a>
+                <a  href="<?php echo site_url('admin/teacher_bulk_add')?>"
+                class="btn btn-primary pull-right">
+                <i class="entypo-plus-circled"></i>
+                <?php echo get_phrase('add_bulk_teacher');?>
+                </a>
                 <a href="<?php echo site_url('admin/print_teacher_list')?>" 
                 class="btn btn-primary pull-right">
                 <i class="entypo-plus-printer"></i>

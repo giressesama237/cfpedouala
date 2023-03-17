@@ -1,0 +1,8 @@
+- Go to system settings from settings menu in admin panel
+- Move to the section 'Update Product' on that page
+- Upload the file 'update_5.6.zip' from your copy of MySchool app downloaded from codecanyon
+- Hit the button 'install update'
+- That's it
+
+PLEASE MAKE SURE THAT YOU ARE RUNNING THE 5.5 VERSION BEFORE UPDATING TO 5.6
+IF YOU ARE ALREADY RUNNING THE 5.6 VERSION THERE IS NO NEED TO UPDATE… Thank You

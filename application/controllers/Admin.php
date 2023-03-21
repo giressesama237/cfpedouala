@@ -1153,7 +1153,7 @@ class Admin extends CI_Controller
                 $csv = array_map('str_getcsv', file('uploads/bulk_teacher.csv'));
                 $count = 1;
                 $array_size = sizeof($csv);
-                var_dump($csv);
+                //var_dump($csv);
                 //die();
                 foreach ($csv as $row) {
                     if ($count == 1) {
@@ -1169,12 +1169,14 @@ class Admin extends CI_Controller
                     $data['higher_diploma']      = $row[5];
                     $data['speciality']      = $row[6];
                     $data['statut']      = $row[7];
-                    $data['address']      = $row[8];
-                    $data['phone']      = $row[9];
+                    //$data['address']      = $row[8];
+                    $data['email']= $row[8];
+                    $data['phone']      = $r ow[9];
                     $name1 = explode(' ', $name);
                     $surname1 = explode(' ', $surname);
-                    $data['email'] = strtolower($name1[0]) . '' . strtolower($surname1[0]) .
-                     '@cfpedouala.com';
+                    //$data['email'] = strtolower($name1[0]) . '' . strtolower($surname1[0]) .
+                     //'@cfpedouala.com';
+                     //$data['email']= $row[8]
                     $data['password'] = sha1('123456');
                     //$validation = email_validation($data['email']);
                     //if ($validation == 1) {

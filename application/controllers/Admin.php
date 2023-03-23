@@ -1171,7 +1171,7 @@ class Admin extends CI_Controller
                     $data['statut']      = $row[7];
                     //$data['address']      = $row[8];
                     $data['email']= $row[8];
-                    $data['phone']      = $r ow[9];
+                    $data['phone']      = $row[9];
                     $name1 = explode(' ', $name);
                     $surname1 = explode(' ', $surname);
                     //$data['email'] = strtolower($name1[0]) . '' . strtolower($surname1[0]) .

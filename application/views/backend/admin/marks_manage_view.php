@@ -194,8 +194,8 @@
 							<th>#</th>
 							<th><?php echo get_phrase('id');?></th>
 							<th><?php echo get_phrase('name');?></th>
-							<th><?php echo get_phrase('seq 1 / 20');?></th>
-							<th><?php echo get_phrase('seq 2 / 20');?></th>
+							<th><?php echo get_phrase('CC/ 20');?></th>
+							<th><?php echo get_phrase('EXAM / 20');?></th>
 							<!--<th><?php echo get_phrase('exam / 40');?></th>-->
 							<th><?php echo get_phrase('comment');?></th>
 						</tr>
@@ -203,11 +203,14 @@
 					<tbody>
 					<?php
 						$count = 1;
-						$this->db->select('s.name,s.surname,s.student_code,s.student_id,e.year,p.title,m.*');
+						$this->db->select('s.name,s.surname,s.student_code,s.student_id,e.year,m.*');
 					    $this->db->join('enroll as e','e.student_id = s.student_id'); 
 					    $this->db->join('mark as m','m.student_id = s.student_id');
-					    $this->db->join('payment as p','p.student_id = s.student_id');
-					    $this->db->where(array('e.class_id' => $class_id , 'e.year' => $running_year, 'e.section_id'=>$section_id,'m.class_id' => $class_id,'m.section_id' => $section_id ,'p.year'=>$running_year,'m.year' => $running_year,'m.subject_id' => $subject_id,'m.exam_id' => $exam_id));
+					    //$this->db->join('payment as p','p.student_id = s.student_id');
+					    //$this->db->where(array('e.class_id' => $class_id , 'e.year' => $running_year, 'e.section_id'=>$section_id,'m.class_id' => $class_id,'m.section_id' => $section_id ,'p.year'=>$running_year,'m.year' => $running_year,'m.subject_id' => $subject_id,'m.exam_id' => $exam_id));
+					    $this->db->where(array('e.class_id' => $class_id , 'e.year' => $running_year,
+						 'e.section_id'=>$section_id,'m.class_id' => $class_id,'m.section_id' => $section_id ,
+						 'm.year' => $running_year,'m.subject_id' => $subject_id,'m.exam_id' => $exam_id));
 					    //$this->db->group_by('s.name, s.surname');
 					    $this->db->order_by('s.name ASC');
 					    $this->db->group_by('s.name, s.surname');

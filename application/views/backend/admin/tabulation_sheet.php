@@ -8,7 +8,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="loader"></div>
-				<div class="col-md-3">
+				<div class="col-md-4">
 					<div class="form-group">
 						<label class="control-label"><?php echo get_phrase('class'); ?></label>
 						<select required name="class_id" class="form-control" data-validate="required" id="class_id" data-message-required="<?php echo get_phrase('value_required'); ?>" onchange="return get_class_sections(this.value)">
@@ -47,7 +47,7 @@
 					</div>
 
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-4">
 					<div class="form-group">
 						<label class="control-label"><?php echo get_phrase('exam'); ?></label>
 						<select required name="exam_id" class="form-control" data-validate="required" id="exam_id" data-message-required="<?php echo get_phrase('value_required'); ?>">
@@ -72,24 +72,24 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<div class="col-md-2" style="margin-top: 20px;">
+				<div class="col-md-2 col-sm-3 col-6" style="margin-top: 20px;">
 					<button type="submit" id='submit' class="btn btn-info"><?php echo get_phrase('view_tabulation_sheet'); ?></button>
 				</div>
-				<div class="col-md-2" style="margin-top: 20px;">
+				<div class="col-md-2 col-sm-3 col-6" style="margin-top: 20px;">
 					<button type="button" title="Generate Marks" id="generate_marks" class="btn btn-labeled btn-success"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> <?php echo get_phrase('generate_marks'); ?></button>
 				</div>
-				<div class="col-md-2" style="margin-top: 20px;">
+				<div class="col-md-2 col-6" style="margin-top: 20px;">
 					<a href="<?php echo site_url('admin/generate_top_20/' . $exam_id); ?>" class="btn btn-labeled btn-success" target="_blank"><span class="btn-label"><i class="glyphicon glyphicon-print"></i></span>
 						<?php echo get_phrase('print_top_moy'); ?>
 					</a>
 
 				</div>
-				<div class="col-md-2" style="margin-top: 20px;">
+				<div class="col-md-2 col-sm-3 col-6" style="margin-top: 20px;">
 					<button type="button" title="<?php echo get_phrase('report_card') ?>" id="print_report_card" class="btn btn-labeled btn-success">
 						<span class="btn-label"><i class="glyphicon glyphicon-print"></i></span>
 						<?php echo get_phrase('report_card'); ?></button>
 				</div>
-				<div class="col-md-2" style="margin-top: 20px;">
+				<div class="col-md-2 col-sm-3 col-6" style="margin-top: 20px;">
 					<div class="form-group">
 
 						<label class="control-label" for="start">Start</label>
@@ -147,8 +147,11 @@
 
 								foreach ($subjects as $row) :
 								?>
-									<td colspan="2" style="text-align: center;"><?php echo $row['name'].' '.$row['subject_id']; ?></td>
+									<td colspan="2" style="text-align: center;"><?php echo $row['name']; ?></td>
+
 								<?php endforeach; ?>
+								<td rowspan="2" style="text-align: center;"><?php echo 'Moy'; ?></td>
+
 
 							</tr>
 							<tr>
@@ -156,27 +159,10 @@
 								<?php
 								foreach ($subjects as $row) :
 								?>
-									<?php if ($exam_name == 'FIRST TERM') { ?>
-										<td style="text-align: center;">Seq 1</td>
-										<td style="text-align: center;">Seq 2</td>
-									<?php
-									} ?>
-									<?php if ($exam_name == 'SECOND TERM') { ?>
-										<td style="text-align: center;">Seq 3</td>
-										<td style="text-align: center;">Seq 4</td>
-									<?php
-									} ?>
-									<?php if ($exam_name == 'THIRD TERM') { ?>
-										<td style="text-align: center;">Seq 5</td>
-										<td style="text-align: center;">Seq 6</td>
-									<?php
-									} ?>
+										<td style="text-align: center;">CC</td>
+										<td style="text-align: center;">EXAM</td>
+									
 								<?php endforeach; ?>
-								<?php if ($exam_name == 'FIRST TERM') { ?>
-									<td style="text-align: center;">Seq 1</td>
-									<td style="text-align: center;">Seq 2</td>
-								<?php
-								} ?>
 
 
 
@@ -195,7 +181,7 @@
 							?>
 								<tr>
 									<td style="text-align: center;">
-										<?php echo $row['name'] . ' ' . $row['surname'].' '.$row['student_id'] ?>
+										<?php echo $row['name'] . ' ' . $row['surname']?>
 									</td>
 									<?php
 									$total_marks = 0;
@@ -222,6 +208,11 @@
 											?>
 										</td>
 									<?php endforeach; ?>
+									<td><?php foreach($mark_moy as $moy){
+										if($moy->student_id==$row['student_id'])
+											echo $moy->moy;
+									}
+									?></td>
 
 								</tr>
 
@@ -403,7 +394,7 @@
 <script>
 	$('#generate_marks').click(function() {
 		class_id = $('#class_id').val();
-		section_id = $('.section_selector_holder').val();
+		section_id = $('.section_id').val();
 		exam_id = $('#exam_id').val();
 		$('#generate_marks').attr('disabled', 'disabled');
 		$('.loader').show();

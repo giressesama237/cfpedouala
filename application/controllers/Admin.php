@@ -1948,18 +1948,23 @@ class Admin extends CI_Controller
         $this->db->select('s.name,s.surname,s.student_id');
 
         $this->db->join('enroll as e', 'e.student_id = s.student_id');
-        $this->db->join('payment as p', 'p.student_id = s.student_id');
+        //$this->db->join('payment as p', 'p.student_id = s.student_id');
         $this->db->join('mark as m', 'm.student_id = s.student_id');
-        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'm.exam_id' => $exam_id));
+        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id,  'm.exam_id' => $exam_id));
+        //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'm.exam_id' => $exam_id));
+        
         $this->db->group_by('s.name, s.surname');
         $this->db->order_by('s.name ASC');
         $students = $this->db->get('student as s')->result_array();
 
         //SUBJECTS
         $subjects = $this->db->get_where('subject', array('class_id' => $class_id, 'section_id' => $section_id, 'year' => $running_year))->result_array();
-
+        //MARKS MOY
+        $mark_moy = $this->db->get_where('mark_moy', array('class_id' => $class_id, 'section_id' => $section_id,'exam_id' => $exam_id, 'year' => $running_year))->result();
+        //var_dump($mark_moy);die();
         $page_data['subjects']    = $subjects;
         $page_data['students']    = $students;
+        $page_data['mark_moy']    = $mark_moy;
         $page_data['obtained_mark_query']    = $obtained_mark_query;
         $page_data['section_id']    = $section_id;
         $page_data['exam_id']    = $exam_id;
@@ -1980,18 +1985,20 @@ class Admin extends CI_Controller
         //STUDENTS
         $this->db->select('s.name,s.surname,s.student_id,mm.moy, s.sex');
         $this->db->join('enroll as e', 'e.student_id = s.student_id');
-        $this->db->join('payment as p', 'p.student_id = s.student_id');
+        //$this->db->join('payment as p', 'p.student_id = s.student_id');
         $this->db->join('mark_moy as mm', 'mm.student_id = s.student_id');
-        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year));
+        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year));
+        //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year));
         $this->db->group_by('s.name, s.surname');
         $this->db->order_by('mm.moy DESC');
         $students = $this->db->get('student as s')->result_array();
         //GARCONS
         $this->db->select('s.name,s.surname,s.student_id,s.sex, mm.moy');
         $this->db->join('enroll as e', 'e.student_id = s.student_id');
-        $this->db->join('payment as p', 'p.student_id = s.student_id');
+        //$this->db->join('payment as p', 'p.student_id = s.student_id');
         $this->db->join('mark_moy as mm', 'mm.student_id = s.student_id');
-        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'male'));
+        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'male'));
+        //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'male'));
         $this->db->group_by('s.name, s.surname');
         $this->db->order_by('mm.moy DESC');
         $garcons = $this->db->get('student as s')->result();
@@ -2000,9 +2007,10 @@ class Admin extends CI_Controller
         //FILLES
         $this->db->select('s.name,s.surname,s.student_id,s.sex, mm.moy');
         $this->db->join('enroll as e', 'e.student_id = s.student_id');
-        $this->db->join('payment as p', 'p.student_id = s.student_id');
+        //$this->db->join('payment as p', 'p.student_id = s.student_id');
         $this->db->join('mark_moy as mm', 'mm.student_id = s.student_id');
-        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'female'));
+        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id,'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'female'));
+        //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'female'));
         $this->db->group_by('s.name, s.surname');
         $this->db->order_by('mm.moy DESC');
         $filles = $this->db->get('student as s')->result();
@@ -2320,9 +2328,10 @@ class Admin extends CI_Controller
             'class_id' => $data['class_id'] , 'section_id' => $data['section_id'] , 'year' => $data['year']
         ))->result_array();*/
             $this->db->select('e.*,s.name');
-            $this->db->join('payment as p', 'p.student_id = e.student_id');
+            //$this->db->join('payment as p', 'p.student_id = e.student_id');
             $this->db->join('student as s', 's.student_id = e.student_id');
-            $this->db->where(array('e.class_id' => $data['class_id'], 'e.section_id' => $data['section_id'], 'e.year' => $data['year'], 'p.year' => $data['year']));
+            //$this->db->where(array('e.class_id' => $data['class_id'], 'e.section_id' => $data['section_id'], 'e.year' => $data['year'], 'p.year' => $data['year']));
+            $this->db->where(array('e.class_id' => $data['class_id'], 'e.section_id' => $data['section_id'], 'e.year' => $data['year']));
             $this->db->group_by('e.student_id');
             $this->db->order_by('s.name');
             $students = $this->db->get('enroll as e')->result_array();
@@ -4758,12 +4767,13 @@ class Admin extends CI_Controller
 
         $this->db->select('s.name,s.surname,s.student_id');
         $this->db->join('enroll as e', 'e.student_id = s.student_id');
-        $this->db->join('payment as p', 'p.student_id = s.student_id');
-        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year));
-        $this->db->group_by('s.name, s.surname');
+        //$this->db->join('payment as p', 'p.student_id = s.student_id');
+        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id));
+        //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year));
+        $this->db->group_by('s.student_id');
         $this->db->order_by('s.name ASC');
         $students = $this->db->get('student as s')->result();
-
+        //var_dump($students);die();
         $subject_test1 = FALSE;
         $subject_test2 = FALSE;
 
@@ -4783,6 +4793,7 @@ class Admin extends CI_Controller
 
 
 
+
         foreach ($students as $row1) {
             //MARKS MOY
             $student_moy = array();
@@ -4793,6 +4804,7 @@ class Admin extends CI_Controller
                 'mark_moy',
                 array('class_id' => $class_id, 'student_id' => $row1->student_id, 'section_id' => $section_id,  'exam_id' => $exam_id, 'year' => $running_year)
             )->result();
+
             foreach ($subjects as  $row2) {
                 foreach ($marks as $row3) {
                     if (($row3->student_id == $row1->student_id) &&
@@ -4805,11 +4817,11 @@ class Admin extends CI_Controller
                             $subject_test2 = TRUE;
                         }
                         if (count($row3->test2) and count($row3->mark_obtained)) {
-                            $total = ($row3->test2  + $row3->mark_obtained) / 2;
+                            $total = ($row3->test2*0.3  + $row3->mark_obtained*0.7) ;
                         } elseif (!count($row3->mark_obtained) and count($row3->test2)) {
-                            $total = $row3->test2;
+                            $total = $row3->test2*0.3;
                         } elseif (!count($row3->test2) and !empty($row3->mark_obtained)) {
-                            $total = $row3->mark_obtained;
+                            $total = $row3->mark_obtained*0.7;
                         } elseif (!count($row3->test2) and empty($row3->mark_obtained)) {
                             $total = null;
                         }
@@ -4824,6 +4836,8 @@ class Admin extends CI_Controller
                     }
                 }
             }
+            //var_dump($total_coef);die();
+
             if ($total_coef != 0) {
                 $moy = sprintf("%.2f", $total_marks / $total_coef);
 
@@ -4920,9 +4934,10 @@ class Admin extends CI_Controller
 
         $this->db->select('s.name,s.surname,s.student_id ,s.student_code, m.mark_obtained,m.test2');
         $this->db->select('p.title');
-        $this->db->join('payment as p', 'p.student_id = s.student_id');
+        //$this->db->join('payment as p', 'p.student_id = s.student_id');
         $this->db->join('mark as m', 'm.student_id = s.student_id');
-        $this->db->where(array('m.year' => $running_year, 'm.exam_id' => $exam_id, 'm.subject_id' => $subject_id, 'p.year' => $running_year,  'm.class_id' => $class_id, 'm.section_id' => $section_id));
+        $this->db->where(array('m.year' => $running_year, 'm.exam_id' => $exam_id, 'm.subject_id' => $subject_id,   'm.class_id' => $class_id, 'm.section_id' => $section_id));
+        //$this->db->where(array('m.year' => $running_year, 'm.exam_id' => $exam_id, 'm.subject_id' => $subject_id, 'p.year' => $running_year,  'm.class_id' => $class_id, 'm.section_id' => $section_id));
         $this->db->group_by('s.name, s.surname');
         $students = $this->db->get('student as s')->result();
 

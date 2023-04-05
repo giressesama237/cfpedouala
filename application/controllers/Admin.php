@@ -1959,10 +1959,14 @@ class Admin extends CI_Controller
 
         //SUBJECTS
         $subjects = $this->db->get_where('subject', array('class_id' => $class_id, 'section_id' => $section_id, 'year' => $running_year))->result_array();
+        //subjects group
+        $subject_type = $this->db->get('subject_type')->result();
+        //var_dump($subject_group);die();
         //MARKS MOY
         $mark_moy = $this->db->get_where('mark_moy', array('class_id' => $class_id, 'section_id' => $section_id,'exam_id' => $exam_id, 'year' => $running_year))->result();
         //var_dump($mark_moy);die();
         $page_data['subjects']    = $subjects;
+        $page_data['subject_type']    = $subject_type;
         $page_data['students']    = $students;
         $page_data['mark_moy']    = $mark_moy;
         $page_data['obtained_mark_query']    = $obtained_mark_query;
@@ -4782,6 +4786,8 @@ class Admin extends CI_Controller
         $subjects = $this->db->get_where('subject', array(
             'class_id' => $class_id, 'year' => $running_year, 'section_id' => $section_id
         ))->result();
+
+        
         //marks 
 
         $marks = $this->db->get_where('mark', array(
@@ -4816,16 +4822,13 @@ class Admin extends CI_Controller
                         if (count($row3->test2)) {
                             $subject_test2 = TRUE;
                         }
-                        if (count($row3->test2) and count($row3->mark_obtained)) {
-                            $total = ($row3->test2*0.3  + $row3->mark_obtained*0.7) ;
-                        } elseif (!count($row3->mark_obtained) and count($row3->test2)) {
-                            $total = $row3->test2*0.3;
-                        } elseif (!count($row3->test2) and !empty($row3->mark_obtained)) {
-                            $total = $row3->mark_obtained*0.7;
-                        } elseif (!count($row3->test2) and empty($row3->mark_obtained)) {
+                        if (count($row3->test2) and count($row3->mark_obtained)) 
+                            $total = ($row3->test2*0.7  + $row3->mark_obtained*0.3) ;
+                        else 
                             $total = null;
-                        }
-                        if (($subject_test1 == TRUE || $subject_test2 == TRUE)) {
+
+                         
+                        if (($subject_test1 == TRUE and $subject_test2 == TRUE)) {
                             $total_coef += $row2->coef;
                         }
                         $subject_test1 = FALSE;

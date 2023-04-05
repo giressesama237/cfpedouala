@@ -44,9 +44,10 @@ $running_year       =   $this->db->get_where('session', array('admin_id'=>$admin
 				
 				foreach($subjects as $row):
 					?>
-					<td colspan="2" style="text-align: center;"><?php echo $row['name'];?></td>
+					<td colspan="4" style="text-align: center;"><?php echo $row['name'];?></td>
 				<?php endforeach;?>
-				<td rowspan="2" style="text-align: center;"><?php echo "moy";?></td>
+				<td rowspan="2" style="text-align: center;"><?php echo "Moy";?></td>
+				<td rowspan="2"  style="text-align: center;"><?php echo "Décision";?></td>
 
 			</tr>
 			<tr>
@@ -54,21 +55,10 @@ $running_year       =   $this->db->get_where('session', array('admin_id'=>$admin
 				<?php
 				foreach($subjects as $row):
 					?>
-					<?php if ($exam_name == 'FIRST TERM') {?>
-						<td style="text-align: center;">Seq 1</td>
-						<td style="text-align: center;">Seq 2</td>
-						<?php
-					}?>
-					<?php if ($exam_name == 'SECOND TERM') {?>
-						<td style="text-align: center;">Seq 3</td>
-						<td style="text-align: center;">Seq 4</td>
-						<?php
-					}?>
-					<?php if ($exam_name == 'THIRD TERM') {?>
-						<td style="text-align: center;">Seq 5</td>
-						<td style="text-align: center;">Seq 6</td>
-						<?php
-					}?>
+					<td style="text-align: center;">CC</td>
+					<td style="text-align: center;">EXAM</td>
+					<td style="text-align: center;">Moy</td>
+					<td style="text-align: center;">Decision</td>
 				<?php endforeach;?>
 				
 			</tr>
@@ -89,14 +79,24 @@ $running_year       =   $this->db->get_where('session', array('admin_id'=>$admin
 					<?php
 					$total_marks = 0;
 					$total_grade_point = 0;  
+					$subject_cc = FALSE;
+					$subject_exam = FALSE;
 					foreach($subjects as $row2):
+						$subject_cc = FALSE;
+						$subject_exam = FALSE;
+						$mark_cc = null;
+									$mark_exam = null;
+									$moyenne = null;
 						?>
 						<td style="text-align: center;">
 							<?php 
 							foreach ($obtained_mark_query as $marks) :
 								if ( ($marks['subject_id'] == $row2['subject_id'])&&($marks['student_id'] == $row['student_id'])) {
 
-									echo $marks['mark1'];
+									echo $mark_cc = $marks['mark1'];
+									if($mark_cc!=null)
+										$subject_cc = TRUE;
+
 								}
 							endforeach;
 							?>
@@ -105,11 +105,34 @@ $running_year       =   $this->db->get_where('session', array('admin_id'=>$admin
 							<?php 
 							foreach ($obtained_mark_query as $marks) :
 								if ( ($marks['subject_id'] == $row2['subject_id'])&&($marks['student_id'] == $row['student_id'])) {
-									echo $marks['mark2'];
+									echo $mark_exam = $marks['mark2'];
+									if($mark_exam!=null)
+									$subject_exam = TRUE;
+
 								}
 							endforeach;
 							?>
 						</td>
+						<td style="text-align: center;">
+											<?php
+											if(($mark_cc!=null) and ($mark_exam!=null))
+												echo '<b>'.sprintf("%.2f",$moyenne= $mark_cc*0.3+$mark_exam*0.7).'</b>';
+											
+											?>
+										</td>
+										<td style="text-align: center;">
+											<?php
+											//var_dump($moyenne);
+
+											if($moyenne<12 or $moyenne==null)
+												echo 'NV';
+											else if($moyenne>=12 and $moyenne<=20)
+												echo 'V';
+
+
+											
+											?>
+										</td>
 					<?php endforeach;?>
 					<td>
 						<?php 
@@ -117,7 +140,7 @@ $running_year       =   $this->db->get_where('session', array('admin_id'=>$admin
 								if($student_moy['student_id'] == $row['student_id']){
 									echo $moy = sprintf("%.2f",$student_moy['moy']);
 									$somme_moyenne += $moy;
-									if ($moy>=10.00) {
+									if ($moy>=12.00) {
 										$nbre_moy++;
 									}
 								}
@@ -125,6 +148,18 @@ $running_year       =   $this->db->get_where('session', array('admin_id'=>$admin
 						?>
 
 					</td>
+					<td><?php foreach($marks_moy as $moy){
+										
+										if($moy['student_id']==$row['student_id'] ){
+											if($moy['moy']<12 or $moy['moy']==null or (!$subject_cc or !$subject_exam))
+												echo '<b>NV</b>';
+											else if(($moy['moy']>=12 and $moy['moy']<=20) ){
+												echo '<b>V</b>';
+												
+											}
+										}
+									}
+									?></td>
 
 				</tr>
 

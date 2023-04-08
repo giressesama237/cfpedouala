@@ -41,12 +41,12 @@ $subject_exam = FALSE;
 
     <?php if ($lang == 'en') { ?>
 
-        <h3 style="font-weight: 100; background-color: rgba(25,170,245,0.2); "><?php echo 'Report Card'; ?></h3>
+        <h3 style="font-weight: 100; background-color: rgba(252,194,59,0.7); "><?php echo 'Report Card'; ?></h3>
     <?php
     } ?>
     <?php if ($lang == 'fr') { ?>
 
-        <h3 style="font-weight: 100; background-color: rgba(25,170,245,0.2); "><?php echo 'Bulletin de Notes'; ?></h3>
+        <h3 style="font-weight: 100; background-color: rgba(252,194,59,0.7); "><?php echo 'Relévé de Notes'; ?></h3>
     <?php
     } ?>
 
@@ -84,18 +84,9 @@ $subject_exam = FALSE;
                         <p style="margin: 0;">Sexe : <?php echo $student->sex ?></p>
                     </td>
                     <td>
-                        <?php if ($exam_name == 'FIRST TERM') { ?>
-                            <p style="margin: 0;">PREMIER TRIMESTRE</p>
-                        <?php
-                        } ?>
-                        <?php if ($exam_name == 'SECOND TERM') { ?>
-                            <p style="margin: 0;">DEUXIEME TRIMESTRE</p>
-                        <?php
-                        } ?>
-                        <?php if ($exam_name == 'THIRD TERM') { ?>
-                            <p style="margin: 0;">TROISIEME TRIMESTRE</p>
-                        <?php
-                        } ?>
+                                                <p style="margin: 0;"><?php echo $exam_name; ?></p>
+
+                        
 
                         <p style="margin: 0;">Année Académique : <?= $year ?></p>
                         <p style="margin: 0;">Professeur Titulaire : <?= $master->name . ' ' . $master->surname; ?> </p>
@@ -115,17 +106,10 @@ $subject_exam = FALSE;
     <table style="width:100%; border-collapse:collapse;border: 1px solid #ccc; margin-top: 3px;" border="1">
         <thead>
             <tr>
-                <td style="text-align: center;" <?php if ($exam_name == 'THIRD TERM') echo 'rowspan="2"' ?>>Disciplines</td>
-                <?php if ($exam_name == 'FIRST TERM') { ?>
-                    <td style="text-align: center;">Seq 1</td>
-                    <td style="text-align: center;">Seq 2</td>
-                <?php
-                } ?>
-                <?php if ($exam_name == 'SECOND TERM') { ?>
-                    <td style="text-align: center;">Seq 3</td>
-                    <td style="text-align: center;">Seq 4</td>
-                <?php
-                } ?>
+                <td style="text-align: center;" <?php if ($exam_name == 'THIRD TERM') echo 'rowspan="2"' ?>>Modules</td>
+                <td style="text-align: center;">CC</td>
+                    <td style="text-align: center;">EXAM</td>
+                    
                 <?php if ($exam_name == 'THIRD TERM') { ?>
                     <?php if ($lang == 'fr') { ?>
                         <td style="text-align: center;" <?php if ($exam_name == 'THIRD TERM') echo 'colspan="1" rowspan="2"' ?>>Trimestre 1</td>
@@ -203,18 +187,10 @@ $subject_exam = FALSE;
 
             ?>
 
-                <tr style="text-align: left; background-color:rgba(25,170,245,0.2); color : white">
+                <tr style="text-align: left; background-color:rgba(252,194,59,0.7); color : white">
                     <td <?php if ($exam_name == 'THIRD TERM') echo 'colspan="12"';
                         else echo 'colspan="8"' ?>>
-                        <?php if ($lang == 'en') { ?>
                             <b><?= strtoupper($key->libelle) ?></b>
-                        <?php } else {
-                            if ($key->libelle == 'Arts Subjects')
-                                echo strtoupper("Matieres Litteraires");
-                            else if ($key->libelle == 'Science Subjects')
-                                echo strtoupper("Matieres Scientifiques");
-                            else echo strtoupper("Autres");
-                        } ?>
 
                     </td>
 
@@ -561,7 +537,7 @@ $subject_exam = FALSE;
     <table style="width:100%; border-collapse:collapse;border: 1px solid #ccc; margin-top: 3px;" border="1">
         <tr>
             <td>
-                <h4 style="font-weight: 100; background-color: rgba(25,170,245,0.2); color :white">
+                <h4 style="font-weight: 100; background-color: rgba(252,194,59,0.7); color :white">
                     <?php
                     if ($lang == 'en') {
                         echo get_phrase('class_profile');
@@ -624,7 +600,7 @@ $subject_exam = FALSE;
             </td>
             <?php if (($exam_name == 'THIRD TERM') || ($sum == TRUE)) { ?>
                 <td>
-                    <h4 style="font-weight: 100; background-color: rgba(25,170,245,0.2); text-align : center">
+                    <h4 style="font-weight: 100; background-color: rgba(252,194,59,0.7); text-align : center">
                         <?php if ($lang == 'en') {
                             echo get_phrase('annual_result');
                         } else {
@@ -696,7 +672,7 @@ $subject_exam = FALSE;
                 </td>
             <?php } ?>
             <td>
-                <h4 width="100%" style="text-align: center; font-weight: 100; background-color: rgba(25,170,245,0.2);">
+                <h4 width="100%" style="text-align: center; font-weight: 100; background-color: rgba(252,194,59,0.7);">
                     <?php
                     if ($lang == 'en') {
                         echo get_phrase('disciplinary_report');
@@ -747,7 +723,7 @@ $subject_exam = FALSE;
         <thead></thead>
         <tbody>
             <tr>
-                <td style="background-color: rgba(25,170,245,0.2);color : white" colspan="4">
+                <td style="background-color: rgba(252,194,59,0.7);color : white" colspan="4">
                     <center>
                         <h4 style="text-align: center; ">
                             <?php

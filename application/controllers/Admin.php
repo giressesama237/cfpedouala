@@ -5113,6 +5113,7 @@ class Admin extends CI_Controller
         $page_data['subject_type'] = $subject_type;
         $page_data['query_annuelle']   =   $query_annuelle;
         $page_data['lang'] = $language;
+        //var_dump($note_classe);die();
 
 
 
@@ -5121,7 +5122,7 @@ class Admin extends CI_Controller
             $limit = 15;
         else if ($limit > sizeof($note_classe))
             $limit = sizeof($note_classe);
-        if ($start <= 0)
+        if ($start <= 0 )
             $start = 1;
         for ($i = $start - 1; $i < $limit; $i++) {
             $student_id = $note_classe[$i]->student_id;
@@ -5136,6 +5137,7 @@ class Admin extends CI_Controller
 
 
             $page_data['student_id'] = $student_id;
+            //var_dump($student_moys, $student);die();
 
 
             $pdf_content =  $this->load->view('backend/admin/report_card', $page_data, true);

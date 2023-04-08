@@ -473,7 +473,7 @@
     $('#print_report_card').click(function () {
         class_id = $('#class_id').val();
         exam_id = $('#exam_id').val();
-        section_id = $('#section_selector_holder').val();
+        section_id = $('.section_id').val();
         start = $('#start').val();
         limit = $('#limit').val();
         $('#print_report_card').attr('disabled', 'disabled');

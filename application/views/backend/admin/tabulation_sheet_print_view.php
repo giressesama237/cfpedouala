@@ -99,7 +99,7 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
         </tbody>
     </table>
 
-
+    <p style="font-size:11px">Notation : CC = 30 % ; EXAM = 70 % ; NV = Non Validé; V = Validé</p>
     <table style="width:100%; border-collapse:collapse;border: 1px solid black; margin-top: 10px;" border="1">
         <thead>
             <tr>
@@ -256,8 +256,10 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
                             </td>
                             <td>
                                  <?php $nonValides = $effectif-$nbre_moy;
-                                 echo get_phrase('non_Validés : ' .$nonValides.' / '.$effectif );?>
-
+                                 echo get_phrase('non_Validés : ' .$nonValides.' / '.$effectif );
+                                 $absents = $effectif_total-$effectif;
+                                echo  ';  Absents : '.$absents ;
+                                 ?>
                             </td>
                         </tr>
                         <tr>

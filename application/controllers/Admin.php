@@ -1996,8 +1996,9 @@ class Admin extends CI_Controller
         $this->db->group_by('s.name, s.surname');
         $this->db->order_by('mm.moy DESC');
         $students = $this->db->get('student as s')->result_array();
+        
         //GARCONS
-        $this->db->select('s.name,s.surname,s.student_id,s.sex, mm.moy');
+        /*$this->db->select('s.name,s.surname,s.student_id,s.sex, mm.moy');
         $this->db->join('enroll as e', 'e.student_id = s.student_id');
         //$this->db->join('payment as p', 'p.student_id = s.student_id');
         $this->db->join('mark_moy as mm', 'mm.student_id = s.student_id');
@@ -2005,11 +2006,11 @@ class Admin extends CI_Controller
         //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'male'));
         $this->db->group_by('s.name, s.surname');
         $this->db->order_by('mm.moy DESC');
-        $garcons = $this->db->get('student as s')->result();
+        $garcons = $this->db->get('student as s')->result();*/
 
 
         //FILLES
-        $this->db->select('s.name,s.surname,s.student_id,s.sex, mm.moy');
+        /*$this->db->select('s.name,s.surname,s.student_id,s.sex, mm.moy');
         $this->db->join('enroll as e', 'e.student_id = s.student_id');
         //$this->db->join('payment as p', 'p.student_id = s.student_id');
         $this->db->join('mark_moy as mm', 'mm.student_id = s.student_id');
@@ -2017,8 +2018,17 @@ class Admin extends CI_Controller
         //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'female'));
         $this->db->group_by('s.name, s.surname');
         $this->db->order_by('mm.moy DESC');
-        $filles = $this->db->get('student as s')->result();
-
+        $filles = $this->db->get('student as s')->result();*/
+        
+        //effectif total
+        $this->db->select('s.student_id');
+        $this->db->join('enroll as e', 'e.student_id = s.student_id');
+        //$this->db->join('payment as p', 'p.student_id = s.student_id');
+        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id));
+        //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year, 's.sex' => 'female'));
+        $this->db->group_by('s.student_id');
+        $effectif_total = count( $this->db->get('student as s')->result());
+       // var_dump($effectif_total);die();
 
         //STUDENTS MARKS
         $this->db->select('m.mark_obtained as mark1 , m.test2 as mark2, m.subject_id, m.student_id');
@@ -2034,9 +2044,11 @@ class Admin extends CI_Controller
         //subjects
         $subjects = $this->db->get_where('subject', array('class_id' => $class_id, 'section_id' => $section_id, 'year' => $running_year))->result_array();
 
-        $page_data['garcons'] = $garcons;
-        $page_data['filles'] = $filles;
-        $page_data['lang'] = "en";
+        //$page_data['garcons'] = $garcons;
+        //$page_data['filles'] = $filles;
+        $page_data['lang'] = "en";        
+        $page_data['effectif_total'] = $effectif_total ;
+
         $page_data['subjects'] = $subjects;
         $page_data['obtained_mark_query'] = $obtained_mark_query;
         $page_data['students'] = $students;

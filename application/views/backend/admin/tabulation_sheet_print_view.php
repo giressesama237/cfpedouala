@@ -29,7 +29,7 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
         <tbody>
             <tr>
                 <td style="text-align:center; font-size: 11px" class="entete" width="30%" >
-                    <p style="margin: 0;">Republique du Cameroun</p>
+                    <p style="margin: 0;">REPUBLIQUE DU CAMEROUN</p>
                     <p style="margin: 0;">Paix-Travail-Patrie</p>
                      <p style="margin: 0;">--------------------</p>
 
@@ -41,8 +41,10 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
 
                     <p style="margin: 0;">CENTRE DE FORMATION PROFESSIONNELLE D’EXCELLENCE DE DOUALA</p>
                     <p style="margin: 0;">--------------------</p>
+                    <p style="margin: 0;">DEPARTEMENT DES AFFAIRES  PEDAGOGIQUES ET DE L'EVALUATION </p>
+                    <p style="margin: 0;">--------------------</p>
 
-                    <p style="margin: 0;">BP: 341 DOUALA TEL : 677 65 37 41</p>
+                    <p style="margin: 0;">BP: 341 DOUALA </p>
                 </td>
                 <td  width="40%" ><center>
 
@@ -58,13 +60,15 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
                     <p style="margin: 0;">MINISTRY OF EMPLOYMENT AND VOCATIONAL TRAINING</p>
                       <p style="margin: 0;">--------------------</p>
 
-                    <p style="margin: 0;">REGIONAL DELEGATION OF LITTORAL</p>
+                    <p style="margin: 0;">LITTORAL REGIONAL DELEGATION </p>
                       <p style="margin: 0;">--------------------</p>
 
-                    <p style="margin: 0;">DOUALA ADVANCED VOCATIONAL TRAINING CENTRE</p>
+                    <p style="margin: 0;">DOUALA ADVANCED VOCATIONAL TRAINING CENTER</p>
+                    <p style="margin: 0;">--------------------</p>
+                    <p style="margin: 0;">PEDAGOGICS AFFAIRS AND EVALUATION DEPARTEMENT </p>
                     <p style="margin: 0;">--------------------</p>
 
-                    <p style="margin: 0;">P.O BOX: 341 DOUALA TEL : 677 65 37 41</p>
+                    <p style="margin: 0;">P.O BOX: 341 DOUALA</p>
                 </td>
         </td>
         </tr>
@@ -88,7 +92,7 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
                 </td>
                 <td style="font-size: 14px">
                     <p style="margin: 0;"><?php echo $exam_name; ?></p>
-                    <p style="margin: 0;">Année Académique : <?= $running_year ?></p>
+                    <p style="margin: 0;">Année de formation  : <?= $running_year ?></p>
                 </td>
 
 

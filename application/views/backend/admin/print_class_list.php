@@ -15,29 +15,28 @@
     }
 
     p {
-        font-size: 11px;
+        font-size: 9px;
     }
 </style>
-<h3 style="font-weight: 100; background-color: rgba(25,170,245,0.2); "><?php echo
- 'Registration List ' . $class_name; ?></h3>
+<h3 style="font-weight: 100; background-color: rgba(252,194,59,0.7);"><?php echo
+ 'Metier ' . $class_name; ?></h3>
 
-
+<h6>Année de Formation : <?php echo $year?> </h6>
 <table style="width:100%; border-collapse:collapse;border: 1px solid #ccc; margin-top: 5px;" border="1">
     <thead>
         <tr>
             <td style="text-align: center;">N</td>
             <td style="text-align: center;">Matricule</td>
-            <td style="text-align: center;">folder</td>
 
-            <td style="text-align: center;">Name </td>
+            <td style="text-align: center;">Noms et Prenoms </td>
 
             <?php if ($list == "2") { ?>
-                <td style="text-align: center;">Observation</td>
+                <td style="text-align: center;">Observations</td>
 
             <?php } elseif ($list == "1") { ?>
-                <td style="text-align: center;">Date of birth</td>
-                <td style="text-align: center;">Place of birth</td>
-                <td style="text-align: center;">Sex</td>
+                <td style="text-align: center;">Date de Naissance</td>
+                <td style="text-align: center;">Lieu</td>
+                <td style="text-align: center;">Sexe</td>
                 <td style="text-align: center;">Contact</td>
                 <td style="text-align: center;">Status</td>
             <?php } ?>
@@ -58,9 +57,7 @@
                 <td>
                     <?php echo $row->student_code ?>
                 </td>
-                <td>
-                    <?php echo $row->num_dossier ?>
-                </td>
+                
                 <td>
                     <?php echo $row->name . ' ' . $row->surname  ?>
                 </td>

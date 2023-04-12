@@ -19,13 +19,7 @@ foreach ($edit_data as $row):
 			<div class="panel-body">
 				
                 <?php echo form_open(site_url('admin/student/do_update/'.$row['student_id'].'/'.$row['class_id'].'/'.$num_folder)  , array('class' => 'form-horizontal form-groups-bordered validate', 'enctype' => 'multipart/form-data'));?>
-                	<div class="form-group">
-						<label for="" class="col-sm-3 control-label"><?php echo get_phrase('Folder Number');?></label>
-
-						<div class="col-sm-5">
-							<input type="number" class="form-control" name="num_dossier"  value="<?php echo $num_folder;  ?>" autofocus >
-						</div>
-					</div>
+                	
                 
                 	
 	

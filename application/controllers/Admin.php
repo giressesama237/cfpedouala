@@ -31,21 +31,31 @@ class Admin extends CI_Controller
     }
 
     /*function get_code student*/
-    public function get_code($last_id)
+    public function get_code($class_id,$section_id)
     {
         $admin_id = $this->session->userdata('admin_id');
         $running_year       =   $this->db->get_where('session', array('admin_id' => $admin_id))->row()->year;
-
+        $class_name = $this->db->get_where('class', array('class_id' => $class_id))->row()->name_numeric;
+        $cycle_id = $this->db->get_where('class', array('class_id' => $class_id))->row()->cycle;
+        $cycle_name = $this->db->get_where('school_fees', array('id' => $cycle_id))->row()->name_numeric;
+        //var_dump($cycle_name);die();
+        
         //student of the running year
-        $year =  $running_year;
-        $student = $this->db->get_where('student', array('year' => $year))->result_array();
+        $this->db->select('s.student_id');
+                $this->db->join('enroll as e', 'e.student_id = s.student_id');
+                $this->db->where(array(
+                    'e.class_id' => $class_id, 'e.year' => $running_year,
+                    'e.section_id' => $section_id
+                ));
+
+        $student = $this->db->get('student as s')->result();
         //var_dump(count($student));die();
-        $last_id = count($student);
-        $year = explode('-', $year);
-        $code_year = (int) $year[0] - 2000;
+        $last_id = count($student)+1;
+        $running_year = explode('-', $running_year);
+        $code_year = (int) $running_year[0] - 2000;
 
         $student_code = sprintf("%03d", $last_id);
-        $code = $code_year . 'SB' . $student_code;
+        $code = $class_name . ''.$code_year.''.$cycle_name.'' . $student_code;
         //var_dump($code);die();
         return $code;
     }
@@ -596,12 +606,15 @@ class Admin extends CI_Controller
             $data['surname']         = trim(html_escape($this->input->post('surname')));
             //$data['num_dossier']         = trim(html_escape($this->input->post('num_dossier')));
             $data['name']         = trim(html_escape($this->input->post('name')));
-            $data['num_dossier']         = trim(html_escape($this->input->post('num_dossier')));
+            //$data['num_dossier']         = trim(html_escape($this->input->post('num_dossier')));
             if (html_escape($this->input->post('birthday')) != null) {
                 $data['birthday']     = html_escape($this->input->post('birthday'));
             }
 
             $data['at']         = html_escape($this->input->post('at'));
+            $class_id         = html_escape($this->input->post('class_id'));
+            $section_id         = html_escape($this->input->post('section_id'));
+
             if ($this->input->post('sex') != null) {
                 $data['sex']          = $this->input->post('sex');
             }
@@ -611,14 +624,14 @@ class Admin extends CI_Controller
             /*if(html_escape($this->input->post('phone')) != null){
               $data['phone']        = html_escape($this->input->post('phone'));
           }*/
-            if (html_escape($this->input->post('num_dossier')) != null) {
+            /*if (html_escape($this->input->post('num_dossier')) != null) {
                 $data['num_dossier']         = trim(html_escape($this->input->post('num_dossier')));
                 $code_validation = code_validation_insert($data['num_dossier']);
                 if (!$code_validation) {
                     $this->session->set_flashdata('error_message', get_phrase('this_code_no_is_not_available'));
                     redirect(site_url('admin/student_add'), 'refresh');
                 }
-            }
+            }*/
 
             /*$data['email']        = html_escape($this->input->post('email'));
             $data['password']     = sha1($this->input->post('password'));*/
@@ -641,7 +654,7 @@ class Admin extends CI_Controller
             $this->db->insert('student', $data);
             $student_id = $this->db->insert_id();
             if ($student_id) {
-                $data_code['student_code'] = $this->get_code($student_id);
+                $data_code['student_code'] = $this->get_code($class_id,$section_id);
                 $this->db->where('student_id', $student_id);
                 $this->db->update('student', $data_code);
                 $data2['student_id']     = $student_id;
@@ -668,16 +681,16 @@ class Admin extends CI_Controller
             redirect(site_url('admin/student_add'), 'refresh');
         }
         if ($param1 == 'do_update') {
-            if (html_escape($this->input->post('num_dossier')) != null) {
-                $dossier = $this->input->post('num_dossier');
-                $data['num_dossier']         = trim(html_escape($this->input->post('num_dossier')));
+            /*if (html_escape($this->input->post('num_dossier')) != null) {
+                //$dossier = $this->input->post('num_dossier');
+                //$data['num_dossier']         = trim(html_escape($this->input->post('num_dossier')));
                 $code_validation = code_validation_insert($data['num_dossier']);
                 if (!$code_validation && ($dossier == $num_folder)) {
                 } else {
                     $this->session->set_flashdata('error_message', get_phrase('this_code_no_is_not_available'));
                     redirect(site_url('admin/student_information/' . $param3), 'refresh');
                 }
-            }
+            }*/
             $data['name']           = trim(html_escape($this->input->post('name')));
             $data['surname']           = trim(html_escape($this->input->post('surname')));
 
@@ -1989,10 +2002,10 @@ class Admin extends CI_Controller
         //STUDENTS
         $this->db->select('s.name,s.surname,s.student_id,mm.moy, s.sex');
         $this->db->join('enroll as e', 'e.student_id = s.student_id');
-        //$this->db->join('payment as p', 'p.student_id = s.student_id');
+        $this->db->join('payment as p', 'p.student_id = s.student_id');
         $this->db->join('mark_moy as mm', 'mm.student_id = s.student_id');
-        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year));
-        //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year));
+        //$this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year));
+        $this->db->where(array('e.class_id' => $class_id, 'e.year' => $running_year, 'e.section_id' => $section_id, 'p.year' => $running_year, 'mm.exam_id' => $exam_id, 'mm.year' => $running_year));
         $this->db->group_by('s.name, s.surname');
         $this->db->order_by('mm.moy DESC');
         $students = $this->db->get('student as s')->result_array();
@@ -4994,10 +5007,14 @@ class Admin extends CI_Controller
             if (($list == 1) || ($list == 2)) {
                 $this->db->select('s.*, e.year as running_year , e.class_id, e.section_id');
                 $this->db->join('enroll as e', 'e.student_id = s.student_id');
-                $this->db->join('invoice as i', 'i.student_id = s.student_id');
-                $this->db->where(array(
+                //$this->db->join('invoice as i', 'i.student_id = s.student_id');
+                /*$this->db->where(array(
                     'e.class_id' => $class_id, 'e.year' => $running_year,
                     'e.section_id' => $section_id, 'i.year' => $running_year
+                ));*/
+                $this->db->where(array(
+                    'e.class_id' => $class_id, 'e.year' => $running_year,
+                    'e.section_id' => $section_id
                 ));
             } elseif ($list == 3) {
                 $this->print_class_moy($class_id, $running_year, $section_id);

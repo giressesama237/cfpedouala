@@ -20,7 +20,7 @@ class Pdf extends MPDF {
     }
 
     public function create_pdf($path='', $filename = '', $html = '', $footer = '', $stream = true, $show_page_num = true, $showwatermarker = false, $watermarkertext = '',$watermarkerimage='',$header = '') {
-        $mpdf = new mPDF('utf-8', 'A4',0,'ctimes',7,7,35,10,5,0);
+        $mpdf = new mPDF('utf-8', 'A4',0,'ctimes',7,7,48,10,5,0);
 //        ('utf-8', 'A4',0,'',5,5,5,5,60);
 //        ($mode, $format, $default_font_size, $default_font, $mgl, $mgr, $mgt, $mgb, $mgh,$mgf)
         if ($show_page_num)

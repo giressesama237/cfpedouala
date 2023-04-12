@@ -10,13 +10,7 @@
 			<div class="panel-body">
 
                 <?php echo form_open(site_url('admin/student/create/') , array('class' => 'form-horizontal form-groups-bordered validate', 'enctype' => 'multipart/form-data'));?>
-                	<div class="form-group">
-						<label for="" class="col-sm-3 control-label"><?php echo get_phrase('Folder Number');?></label>
-
-						<div class="col-sm-5">
-							<input type="number" class="form-control" name="num_dossier" data-validate="required" data-message-required="<?php echo get_phrase('value_required');?>" value="" autofocus required>
-						</div>
-					</div>
+                	
 					<div class="form-group">
 						<label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('lastname');?></label>
 

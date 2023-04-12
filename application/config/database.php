@@ -64,7 +64,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'hostname' => 'cfpedouala',
 	'username' => 'admin',
 	'password' => 'admin',
 	'database' => 'cfpedouala',

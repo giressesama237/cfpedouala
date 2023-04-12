@@ -119,7 +119,7 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
             <b><td colspan="4" style="text-align: center;"><?php echo '<b>' . $row['code'] . '<b>'; ?></td><b>
                 <?php endforeach; ?>
                 <td rowspan="2" style="text-align: center;"><?php echo "Moy"; ?></td>
-                <td rowspan="2"  style="text-align: center;"><?php echo "Dec."; ?></td>
+                <!--<td rowspan="2"  style="text-align: center;"><?php echo "Dec."; ?></td>-->
 
                 </tr>
                 <tr>
@@ -159,37 +159,51 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
                                 $mark_exam = null;
                                 $moyenne = null;
                                 ?>
-                                <td style="text-align: center;">
-                                    <?php
+                                
+                                <?php
                                     foreach ($obtained_mark_query as $marks) :
                                         if (($marks['subject_id'] == $row2['subject_id']) && ($marks['student_id'] == $row['student_id'])) {
-
-                                            echo $mark_cc = $marks['mark1'];
-                                            if ($mark_cc == null)
+                                            $mark_cc = $marks['mark1'];
+                                            if ($mark_cc == null){
                                                 $subject_cc = TRUE;
-                                            //var_dump($subject_cc);
+                                                echo'<td style="background-color:gray; text-align: center;"></td>';
+
+                                            }
+                                            else{
+                                                echo'<td style=" text-align: center;">'.$mark_cc.'</td>';
+
+                                            }
+
                                         }
                                     endforeach;
                                     ?>
-                                </td>
-                                <td style="text-align: center;">
-                                    <?php
+                                <?php
                                     foreach ($obtained_mark_query as $marks) :
                                         if (($marks['subject_id'] == $row2['subject_id']) && ($marks['student_id'] == $row['student_id'])) {
-                                            echo $mark_exam = $marks['mark2'];
-                                            if ($mark_exam == null)
+                                            $mark_exam = $marks['mark2'];
+                                            if ($mark_exam == null){
                                                 $subject_exam = TRUE;
+                                                echo'<td style="background-color:gray; text-align: center;"></td>';
+
+                                            }
+                                            else{
+                                                echo'<td style=" text-align: center;">'.$mark_exam.'</td>';
+
+                                            }
+
                                         }
                                     endforeach;
+                                    if (($mark_cc != null) and ($mark_exam != null))
+                                    $moyenne = sprintf("%.2f",$mark_cc * 0.3 + $mark_exam * 0.7);
                                     ?>
-                                </td>
-                                <td style="text-align: center;">
+                                
+                                <td <?php if($mark_cc == null or $mark_exam == null or $moyenne<12 ) echo'style="background-color:gray"';  ?>>
                                     <?php
                                     if (($mark_cc != null) and ($mark_exam != null))
-                                        echo '<b>' . sprintf("%.2f", $moyenne = $mark_cc * 0.3 + $mark_exam * 0.7) . '</b>';
+                                        echo '<b>' .  $moyenne = sprintf("%.2f",$mark_cc * 0.3 + $mark_exam * 0.7) . '</b>';
                                     ?>
                                 </td>
-                                <td style="text-align: center;">
+                                <td <?php if($mark_cc == null or $mark_exam == null or $moyenne<12  ) echo'style="background-color:gray"';  ?>>
                                     <?php
                                     //var_dump($moyenne);
 
@@ -200,21 +214,27 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
                                     ?>
                                 </td>
                             <?php endforeach; ?>
-                            <td>
-                                <?php
+                            <?php
                                 foreach ($marks_moy as $student_moy):
-                                    if (($student_moy['student_id'] == $row['student_id']) and (!$subject_cc and!$subject_exam)) {
-                                        echo '<b>'.$moy = sprintf("%.2f", $student_moy['moy']).'</b>';
+                                    if (($student_moy['student_id'] == $row['student_id']) ) {
+                                        $moy = sprintf("%.2f", $student_moy['moy']);
                                         $somme_moyenne += $moy;
-                                        if ($moy >= 12.00) {
+                                        if ($moy >= 12.00 and !$subject_cc and !$subject_exam ) {
                                             $nbre_moy++;
+                                            echo'<td style=" text-align: center;">'.$moy.'</td>';
+
+                                        }else{
+                                            if(!$subject_cc and !$subject_exam )
+                                            echo'<td style="background-color:gray; text-align: center;">'.$moy.'</td>';
+                                            else
+                                            echo'<td style="background-color:gray; text-align: center;"></td>';
+
                                         }
                                     }
                                 endforeach;
                                 ?>
-
-                            </td>
-                            <td><?php
+                            
+                            <!--<td><?php
                                 foreach ($marks_moy as $moy) {
 
                                     if ($moy['student_id'] == $row['student_id']) {
@@ -225,7 +245,7 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
                                         }
                                     }
                                 }
-                                ?></td>
+                                ?></td>-->
 
                         </tr>
 
@@ -293,7 +313,7 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
                     <thead> <td colspan="2"style="background-color: rgba(252,194,59,0.7); text-align: center">Modules </td> </thead>
                     <tbody>
                         <?php
-                       for($i=0; $i<count($subjects)-1; $i+=2 ){?>
+                       for($i=0; $i<count($subjects); $i+=2 ){?>
                            <tr>
                             <td>
                                   <?php echo $subjects[$i]['code'].' '.$subjects[$i]['name']  ?>

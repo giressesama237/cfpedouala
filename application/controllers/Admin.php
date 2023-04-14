@@ -5111,7 +5111,14 @@ class Admin extends CI_Controller
         $section_name       =   $section_info->name;
         $master_id          =   $section_info->teacher_id;
         $master     =   $this->db->get_where('teacher', array('teacher_id' => $master_id))->row();
-        $subject_type = $this->db->get('subject_type')->result();
+
+        //GET SUBJECTS
+        $this->db->select('st.*');
+                $this->db->join('subject as s', 'st.type_id = s.type_id');
+                $this->db->where(array('s.class_id' => $class_id, 's.section_id' => $section_id, 's.year' => $running_year));
+                $this->db->group_by('st.type_id ');
+                $this->db->order_by('st.type_id ASC');
+                $subject_type = $this->db->get('subject_type as st')->result();
         //$query_annuelle = $this->db->get_where('moy_annuelle', array('class_id' => $class_id, 'year' => $running_year))->result();
 
         $page_data['class_id']   =   $class_id;
@@ -5125,7 +5132,7 @@ class Admin extends CI_Controller
         $page_data['system_name']    =   $system_name;
         $page_data['year'] = $running_year;
         $page_data['moy_class'] = sprintf("%.2f", array_sum($note) / count($note_classe));
-        //var_dump($note);die();
+        //var_dump($subject_type);die();
         $page_data['note_classe'] = $note_classe;
         $page_data['subject_type'] = $subject_type;
         $page_data['query_annuelle']   =   $query_annuelle;
@@ -5162,7 +5169,7 @@ class Admin extends CI_Controller
             $section_name.'_'. $exam_name.'_'.$language;
 
             //$filename = $student_id . '_' . $exam_name;
-            $header = $this->load->view('backend/pdf_templates/header_report_card', $page_data, true);
+            $header = $this->load->view('backend/pdf_templates/header', $page_data, true);
 
             $filigrane = base_url() . "uploads/logo_filigrane.png";
             $pdf = $this->pdf->create_pdf(REPORTFOLDER, $filename, $pdf_content, '', false, false, true, '', $filigrane, $header);

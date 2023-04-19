@@ -236,7 +236,7 @@ $subject_exam = FALSE;
                     
                     <td style="text-align: center;">
     <?php if ($sum_coef != 0) { ?>
-                            <b><?= $sum_total/$sum_coef ?></b>
+                        <b><?= sprintf("%.2f",$sum_total/$sum_coef)  ?></b>
                         <?php } ?>
                     </td>
 
@@ -504,10 +504,10 @@ $subject_exam = FALSE;
     
 
 <?php if ($lang == 'en') { ?>
-        <p class="printp"  style="margin-left: 80% ; margin-top:4px;"> Douala , The</p>
+        <p class="printp"  style="margin-left: 80% ; margin-top:4px;"> Douala , The <?php echo date("d/m/Y")  ?> </p>
         <p class="printp" style="margin-left: 80%;"> The Principal</p>
 <?php } else { ?>
-        <p class="printp" style="margin-left: 80%; margin-top:5px;"> Douala , Le</p>
+        <p class="printp" style="margin-left: 80%; margin-top:5px;"> Douala , Le <?php echo date("d/m/Y")  ?></p>
         <p class="printp" style="margin-left: 80%;"> Le Directeur</p>
 <?php }  ?>
 

@@ -22,9 +22,14 @@ class Crud_model extends CI_Model {
     }
 
     ////////STUDENT/////////////
-    function get_students($class_id) {
-        $query = $this->db->get_where('student', array('class_id' => $class_id));
-        return $query->result_array();
+    function get_students($class_id,$running_year) {
+        $this->db->select('s.*');
+                $this->db->join('enroll as e', 'e.student_id = s.student_id');
+                $this->db->where(array(
+                    'e.class_id' => $class_id, 'e.year' => $running_year
+                ));
+
+        return $student = $this->db->get('student as s')->result();
     }
 
     function get_student_info($student_id) {
@@ -40,7 +45,7 @@ class Crud_model extends CI_Model {
     /////////TEACHER/////////////
     function get_teachers() {
         $query = $this->db->get('teacher');
-        return $query->result_array();
+        return $query->result();
     }
 
     function get_teacher_name($teacher_id) {

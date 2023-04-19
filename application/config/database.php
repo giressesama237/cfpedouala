@@ -64,9 +64,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'cfpedouala',
-	'username' => 'admin',
-	'password' => 'admin',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
 	'database' => 'cfpedouala',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

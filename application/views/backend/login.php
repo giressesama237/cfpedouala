@@ -1,6 +1,8 @@
 <?php
 $system_name  = $this->db->get_where('settings', array('type' => 'system_name'))->row()->description;
 $header_logo  = $this->frontend_model->get_frontend_general_settings('header_logo');
+//var_dump($header_logo, $system_name);
+//die();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,11 +58,11 @@ $header_logo  = $this->frontend_model->get_frontend_general_settings('header_log
                             <form action="<?php echo site_url('login/validate_login'); ?>" method="post">
                                 <div class="section-field mb-20">
                                     <label class="mb-10" for="name"><?php echo get_phrase('email'); ?>* </label>
-                                    <input id="email" class="web form-control" type="email" placeholder="<?php echo get_phrase('email'); ?>" name="email" required>
+                                    <input id="email" class="web form-control" type="email" placeholder="<?php echo get_phrase('email'); ?>" name="email" value="" autocomplete="false"  required>
                                 </div>
                                 <div class="section-field mb-20">
                                     <label class="mb-10" for="Password"><?php echo get_phrase('password'); ?>* </label>
-                                    <input id="Password" class="Password form-control" type="password" placeholder="<?php echo get_phrase('password'); ?>" name="password" required>
+                                    <input id="Password" class="Password form-control" type="password" placeholder="<?php echo get_phrase('password'); ?>" value="" autocomplete="false" name="password" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary"><?php echo get_phrase('login'); ?></button>
                             </form>
@@ -113,20 +115,20 @@ $header_logo  = $this->frontend_model->get_frontend_general_settings('header_log
         }
     </script>
     <!-- SHOW TOASTR NOTIFIVATION -->
-    <?php if ($this->session->flashdata('flash_message') != ""):?>
+    <?php if ($this->session->flashdata('flash_message') != ""){?>
 
     <script type="text/javascript">
     	toastr.success('<?php echo $this->session->flashdata("flash_message");?>');
     </script>
 
-    <?php endif;?>
+    <?php }?>
 
-    <?php if ($this->session->flashdata('error_message') != ""):?>
+    <?php if ($this->session->flashdata('error_message') != ""){?>
 
     <script type="text/javascript">
     	toastr.error('<?php echo $this->session->flashdata("error_message");?>');
     </script>
 
-    <?php endif;?>
+    <?php }?>
 </body>
 </html>

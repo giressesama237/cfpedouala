@@ -15,10 +15,10 @@ $subject_exam = FALSE;
 
 
 <style type="text/css">
-     *{
+    *{
         font-family:'Times New Roman', Times, serif;
     }
-    
+
 
     td {
         padding: 3px;
@@ -46,15 +46,15 @@ $subject_exam = FALSE;
 
 
 
-<?php if ($lang == 'en') { ?>
+    <?php if ($lang == 'en') { ?>
 
         <h3 style="font-weight: 100; background-color: rgba(252,194,59,0.7); "><?php echo 'Report Card'; ?></h3>
-        <?php }
+    <?php }
     ?>
-<?php if ($lang == 'fr') { ?>
+    <?php if ($lang == 'fr') { ?>
 
         <h3 style="font-weight: bold;  background-color: rgba(252,194,59,0.7); "><?php echo 'Relévé de Notes'; ?></h3>
-        <?php }
+    <?php }
     ?>
 
 
@@ -63,13 +63,13 @@ $subject_exam = FALSE;
         <tbody>
             <tr>
 
-<?php if ($lang == 'fr') { ?>
+                <?php if ($lang == 'fr') { ?>
 
                     <td>
                         <p  class="printp" ><?php echo get_phrase('metier') . ' ' . $class_name; ?></p>
                         <p class="printp" >Matricule : <?= $student->student_code ?></p>
                         <p class="printp" >Noms et Prénoms : <?php echo $student->name . ' ' . $student->surname ?></p>
-                        <p class="printp">Date et Lieu de Naissance : <?php echo date('d/m/Y',strtotime($student->birthday)) . ' à ' . $student->at ?></p>
+                        <p class="printp">Date et Lieu de Naissance : <?php echo date('d/m/Y', strtotime($student->birthday)) . ' à ' . $student->at ?></p>
                         <p class="printp" >Sexe : <?php echo $student->sex ?></p>
                     </td>
                     <td>
@@ -94,6 +94,8 @@ $subject_exam = FALSE;
     <table  style="width:100%; border-collapse:collapse;border: 1px solid black; margin-top: 3px;" border="1">
         <thead>
             <tr>
+                <td style="text-align: center;">Code</td>
+
                 <td style="text-align: center;" <?php if ($exam_name == 'THIRD TERM') echo 'rowspan="2"' ?>>Modules</td>
                 <td style="text-align: center;">CC</td>
                 <td style="text-align: center;">EXAM</td>
@@ -125,9 +127,7 @@ $subject_exam = FALSE;
 
         </thead>
         <tbody>
-            <tr>
-                <!--<td colspan="9" style="background-color: #28E5FC;"><b><p>ARTS SUBJECTS</p></td></b>-->
-            </tr>
+
             <?php
             $total_marks = 0;
             $marks_coef = 0;
@@ -145,7 +145,7 @@ $subject_exam = FALSE;
                 ?>
 
                 <tr  style="text-align: center; font-weight: bold; background-color:rgba(252,194,59,0.7); ">
-                    <td  colspan="5" style="font-weight: bold;" >
+                    <td   colspan="6" style="text-align: center; font-weight: bold;" >
                         <b><?= strtoupper($key->libelle) ?></b>
 
                     </td>
@@ -160,6 +160,8 @@ $subject_exam = FALSE;
                 foreach ($subjects as $row3) {
                     ?>
                     <tr>
+                        <td style="text-align: center;"><?php echo $row3->code; ?><br>
+
                         <td style="text-align: left;"><?php echo $row3->name; ?><br>
                             <b><?php echo ucwords($row3->teacher_name . ' ' . $row3->teacher_surname); ?></b>
                         </td>
@@ -227,30 +229,30 @@ $subject_exam = FALSE;
                             ?>
                         </td>
                     </tr>
-    <?php } ?>
+                <?php } ?>
                 <tr>
-                    <td colspan="3" style="text-align: left;">
+                    <td colspan="4" style="text-align: left;">
                         <b>Total </b>
                     </td>
 
-                    
+
                     <td style="text-align: center;">
-    <?php if ($sum_coef != 0) { ?>
-                        <b><?= sprintf("%.2f",$sum_total/$sum_coef)  ?></b>
+                        <?php if ($sum_coef != 0) { ?>
+                            <b><?= sprintf("%.2f", $sum_total / $sum_coef) ?></b>
                         <?php } ?>
                     </td>
 
 
                     <td style="text-align: center;">
-    <?php if ($sum_marks != 0) { ?>
+                        <?php if ($sum_marks != 0) { ?>
                             <b><?= $sum_marks ?></b>
-                <?php } ?>
+                        <?php } ?>
                     </td>
 
 
                 </tr>
-<?php }
-?>
+            <?php }
+            ?>
         </tbody>
     </table>
 
@@ -287,11 +289,11 @@ $subject_exam = FALSE;
                     ?>
                 </td>
                 <td>
-                <?php
-                $grade = $this->db->get_where('grade', array('mark_from <=' => $student_note,
-                    'mark_upto >=' => $student_note, 'lang' => $lang))->row()->grade_point;
-                echo get_phrase("decision : ".$grade);
-                ?>
+                    <?php
+                    $grade = $this->db->get_where('grade', array('mark_from <=' => $student_note,
+                                'mark_upto >=' => $student_note, 'lang' => $lang))->row()->grade_point;
+                    echo get_phrase("decision : " . $grade);
+                    ?>
                 </td>
 
 
@@ -362,38 +364,38 @@ $subject_exam = FALSE;
                     echo get_phrase('moyenne_de_la_classe');
                 }
                 ?> :
-                    <?php
-                    echo $moy_class;
-                    ?>
+                <?php
+                echo $moy_class;
+                ?>
             </td>
-                    <?php if (($exam_name == 'THIRD TERM') || ($sum == TRUE)) { ?>
+            <?php if (($exam_name == 'THIRD TERM') || ($sum == TRUE)) { ?>
                 <td>
                     <h4 style="font-weight: 100; background-color: rgba(252,194,59,0.7); text-align : center">
-                    <?php
-                    if ($lang == 'en') {
-                        echo get_phrase('annual_result');
-                    } else {
-                        echo get_phrase('recapitulatif_annuel');
-                    }
-                    ?></h4>
                         <?php
                         if ($lang == 'en') {
-                            echo get_phrase('Term 1');
+                            echo get_phrase('annual_result');
                         } else {
-                            echo get_phrase('Trimestre 1');
+                            echo get_phrase('recapitulatif_annuel');
                         }
-                        ?> :
-                        <?php
-                    foreach ($student_moys as $student_moy) {
-                        if ($student_moy->exam_id == $exam_id - 2)
-                            $term1_moy = $student_moy->moy;
-                        elseif ($student_moy->exam_id == $exam_id - 1)
-                            $term2_moy = $student_moy->moy;
-                        elseif ($student_moy->exam_id == $exam_id)
-                            $term3_moy = $student_moy->moy;
+                        ?></h4>
+                    <?php
+                    if ($lang == 'en') {
+                        echo get_phrase('Term 1');
+                    } else {
+                        echo get_phrase('Trimestre 1');
                     }
-                    echo $term1_moy;
-                    ?><br>
+                    ?> :
+                        <?php
+                        foreach ($student_moys as $student_moy) {
+                            if ($student_moy->exam_id == $exam_id - 2)
+                                $term1_moy = $student_moy->moy;
+                            elseif ($student_moy->exam_id == $exam_id - 1)
+                                $term2_moy = $student_moy->moy;
+                            elseif ($student_moy->exam_id == $exam_id)
+                                $term3_moy = $student_moy->moy;
+                        }
+                        echo $term1_moy;
+                        ?><br>
                     <?php
                     if ($lang == 'en') {
                         echo get_phrase('Term 2');
@@ -433,36 +435,36 @@ $subject_exam = FALSE;
                         }
                     }
                     ?><br>
-                        <?php
-                        if ($lang == 'en') {
-                            echo get_phrase('annual_rank');
-                        } else {
-                            echo get_phrase('rank_annuel');
-                        }
-                        ?> :
-                        <?php
-                        echo ($e);
-                        ?><br>
+                    <?php
+                    if ($lang == 'en') {
+                        echo get_phrase('annual_rank');
+                    } else {
+                        echo get_phrase('rank_annuel');
+                    }
+                    ?> :
+                    <?php
+                    echo ($e);
+                    ?><br>
                 </td>
-                <?php } ?>
+            <?php } ?>
             <td>
                 <h4 width="100%" style="text-align: center; font-weight: 100; background-color: rgba(252,194,59,0.7);">
+                    <?php
+                    if ($lang == 'en') {
+                        echo get_phrase('disciplinary_report');
+                    } else {
+                        echo get_phrase('rapport_disciplinaire');
+                    }
+                    // echo get_phrase('disciplinary_report');
+                    ?>
+                </h4>
                 <?php
                 if ($lang == 'en') {
-                    echo get_phrase('disciplinary_report');
+                    echo get_phrase('Absent');
                 } else {
-                    echo get_phrase('rapport_disciplinaire');
+                    echo get_phrase('Absences');
                 }
-                // echo get_phrase('disciplinary_report');
-                ?>
-                </h4>
-            <?php
-            if ($lang == 'en') {
-                echo get_phrase('Absent');
-            } else {
-                echo get_phrase('Absences');
-            }
-            ?> : 
+                ?> : 
                 <?= $attendance_number . ' ' ?>
                 <?php
                 if ($lang == 'en') {
@@ -477,39 +479,39 @@ $subject_exam = FALSE;
                 <td>
 
                     <input type="checkbox" name="" <?php if ($moy_annuelle >= 10.00) { ?> checked="checked" <?php } ?> value="">
-    <?php
-    if ($lang == 'en') {
-        echo get_phrase('promoted_to') . ' : ';
-    } else {
-        echo get_phrase('promu_en_classe_de') . ' : ';
-    }
-    ?>
+                    <?php
+                    if ($lang == 'en') {
+                        echo get_phrase('promoted_to') . ' : ';
+                    } else {
+                        echo get_phrase('promu_en_classe_de') . ' : ';
+                    }
+                    ?>
                     <input type="checkbox" name="" value="">
-    <?php
-    if ($lang == 'en') {
-        echo get_phrase('repeat');
-    } else {
-        echo get_phrase('Redouble');
-    }
-    ?>
+                    <?php
+                    if ($lang == 'en') {
+                        echo get_phrase('repeat');
+                    } else {
+                        echo get_phrase('Redouble');
+                    }
+                    ?>
 
                 </td>
-                <?php } ?>
+            <?php } ?>
         </tr>
 
     </table>
 
 
 
-    
 
-<?php if ($lang == 'en') { ?>
-        <p class="printp"  style="margin-left: 80% ; margin-top:4px;"> Douala , The <?php echo date("d/m/Y")  ?> </p>
+
+    <?php if ($lang == 'en') { ?>
+        <p class="printp"  style="margin-left: 80% ; margin-top:4px;"> Douala , The <?php echo date("d/m/Y") ?> </p>
         <p class="printp" style="margin-left: 80%;"> The Principal</p>
-<?php } else { ?>
-        <p class="printp" style="margin-left: 80%; margin-top:5px;"> Douala , Le <?php echo date("d/m/Y")  ?></p>
+    <?php } else { ?>
+        <p class="printp" style="margin-left: 80%; margin-top:5px;"> Douala , Le <?php echo date("d/m/Y") ?></p>
         <p class="printp" style="margin-left: 80%;"> Le Directeur</p>
-<?php }  ?>
+    <?php } ?>
 
 
 </div>

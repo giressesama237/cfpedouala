@@ -31,7 +31,17 @@ class Crud_model extends CI_Model {
 
         return $student = $this->db->get('student as s')->result();
     }
+ 
 
+    function get_all_students() {
+        $query = $this->db->get('student');
+        return $query->result();
+    }
+    function get_all_parents() {
+        $query = $this->db->get('parent');
+        return $query->result();
+    }
+    
     function get_student_info($student_id) {
         $query = $this->db->get_where('student', array('student_id' => $student_id));
         return $query->result_array();
@@ -47,6 +57,10 @@ class Crud_model extends CI_Model {
         $query = $this->db->get('teacher');
         return $query->result();
     }
+    function get_admin() {
+        $query = $this->db->get('admin');
+        return $query->result();
+    }
 
     function get_teacher_name($teacher_id) {
         $query = $this->db->get_where('teacher', array('teacher_id' => $teacher_id));
@@ -58,6 +72,42 @@ class Crud_model extends CI_Model {
     function get_teacher_info($teacher_id) {
         $query = $this->db->get_where('teacher', array('teacher_id' => $teacher_id));
         return $query->result_array();
+    }
+
+
+    function deleteStudent($student_id) {
+        $this->db->where('student_id', $student_id);
+        $this->db->delete('student');
+    }
+    
+    function add_teacher($data) {
+        $this->db->insert('teacher', $data);
+    }
+
+    function add_student($data) {
+        $this->db->insert('student', $data);
+      
+    }
+
+    
+    function update_teacher($teacher_id, $data) {
+        $this->db->where('teacher_id', $teacher_id);
+        $this->db->update('teacher', $data);
+    }
+        
+    function get_teacher_class ($teacher_id) {
+        $this->db->select('c.name as classname');
+                $this->db->join('class as c', 'c.teacher_id = t.teacher_id');
+                $this->db->where(array(
+                    't.teacher_id' => $teacher_id
+                ));
+        return $data = $this->db->get('teacher as t')->result();
+
+    }
+
+    function get_section () {
+        $section = $this->db->get('section');
+        return $section->result();
     }
 
     //////////SUBJECT/////////////
@@ -107,17 +157,9 @@ class Crud_model extends CI_Model {
     }
 
     //////////EXAMS/////////////
-    function get_exams() {
-         
-        $admin_id= $this->session->userdata('admin_id');
-        if ($this->session->userdata('admin_login') == 1) {
-            $running_year       =   $this->db->get_where('session', array('admin_id'=>$admin_id))->row()->year;
+    function get_exams($running_year) {
             $query = $this->db->get_where('exam' , array(
-            'year' =>$running_year ));
-        }else{
-            $query = $this->db->get_where('exam' , array(
-            'year' => $this->db->get_where('settings' , array('type' => 'running_year'))->row()->description));
-        }
+            'year' => $running_year));
         
         return $query->result_array();
     }

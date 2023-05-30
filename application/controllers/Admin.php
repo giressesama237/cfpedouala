@@ -4708,7 +4708,7 @@ class Admin extends CI_Controller {
         $subjects = $this->db->get_where('subject', array(
                     'class_id' => $class_id, 'year' => $running_year, 'section_id' => $section_id
                 ))->result();
-
+            //var_dump($subjects);die();
 
         //marks 
 

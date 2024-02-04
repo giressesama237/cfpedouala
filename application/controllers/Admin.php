@@ -1397,6 +1397,8 @@ class Admin extends CI_Controller
         $page_data['page_title'] = get_phrase('manage_class');
         $this->load->view('backend/index', $page_data);
     }
+
+    /// Notification 
     function get_subject($class_id)
     {
         $subject = $this->db->get_where('subject', array(
@@ -4697,6 +4699,7 @@ class Admin extends CI_Controller
 
         $date_from = $_POST['date_from'];
         $date_to = $_POST['date_to'];
+        var_dump($date_from);die();
 
         $this->db->select('s.name, s.surname,e.class_id,e.section_id, i.*');
         $this->db->join('student as s', 's.student_id=i.student_id');
@@ -4821,7 +4824,7 @@ class Admin extends CI_Controller
             'section_id' => $section_id,
             'year' => $running_year
         ))->result();
-
+        //var_dump($marks);die();
 
 
 
@@ -4864,7 +4867,7 @@ class Admin extends CI_Controller
                     }
                 }
             }
-            //var_dump($total_coef);die();
+            //var_dump($mark_moy);
 
             if ($total_coef != 0) {
                 $moy = sprintf("%.2f", $total_marks / $total_coef);

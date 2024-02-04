@@ -4,8 +4,7 @@ $somme_moyenne = 0;
 $class_name = $this->db->get_where('class', array('class_id' => $class_id))->row()->name;
 $exam_name = $this->db->get_where('exam', array('exam_id' => $exam_id))->row()->name;
 $system_name = $this->db->get_where('settings', array('type' => 'system_name'))->row()->description;
-$admin_id = $this->session->userdata('admin_id');
-$running_year = $this->db->get_where('session', array('admin_id' => $admin_id))->row()->year;
+
 ?>
 <div id="print">
     <script src="assets/js/jquery-1.11.0.min.js"></script>
@@ -27,7 +26,7 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
     <table style="width:100%;">
         <thead></thead>
         <tbody>
-            <tr>
+            <!-- <tr>
                 <td style="text-align:center; font-size: 11px" class="entete" width="30%" >
                     <p style="margin: 0;">REPUBLIQUE DU CAMEROUN</p>
                     <p style="margin: 0;">Paix-Travail-Patrie</p>
@@ -71,7 +70,7 @@ $running_year = $this->db->get_where('session', array('admin_id' => $admin_id))-
                     <p style="margin: 0;">P.O BOX: 341 DOUALA</p>
                 </td>
         </td>
-        </tr>
+        </tr> -->
         </tbody>
     </table>
 

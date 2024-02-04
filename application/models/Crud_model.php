@@ -2,6 +2,10 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+    header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
 
 class Crud_model extends CI_Model {
 
@@ -21,30 +25,53 @@ class Crud_model extends CI_Model {
 
     }
 
+
+    ///login
+    function login($table,$credentials){
+        $query = $this->db->get_where($table, $credentials)->row();
+        return $query;
+    }
+
+
     ////////STUDENT/////////////
-    function get_students($class_id,$running_year) {
+    function get_students($class_id,$running_year, $limit = 0) {
         $this->db->select('s.*');
                 $this->db->join('enroll as e', 'e.student_id = s.student_id');
                 $this->db->where(array(
                     'e.class_id' => $class_id, 'e.year' => $running_year
                 ));
+                $this->db->limit($limit);
 
         return $student = $this->db->get('student as s')->result();
     }
- 
+
 
     function get_all_students() {
         $query = $this->db->get('student');
         return $query->result();
     }
+
+    function get_all_students_bySex() {
+        $this->db->select('s.*');
+                $this->db->where(array('sex' => "F"));
+        return $student = $this->db->get('student as s')->result();
+    }
+
     function get_all_parents() {
         $query = $this->db->get('parent');
         return $query->result();
     }
+
     
+
     function get_student_info($student_id) {
         $query = $this->db->get_where('student', array('student_id' => $student_id));
         return $query->result_array();
+    }
+
+    function get_sectionby($class_id) {
+        $query = $this->db->get_where('section', array('class_id' => $class_id))->row();
+        return $query;
     }
 
     function get_student_info_by_id($student_id) {
@@ -55,6 +82,10 @@ class Crud_model extends CI_Model {
     /////////TEACHER/////////////
     function get_teachers() {
         $query = $this->db->get('teacher');
+        return $query->result();
+    }
+    function get_parents() {
+        $query = $this->db->get('parent');
         return $query->result();
     }
     function get_admin() {
@@ -79,22 +110,148 @@ class Crud_model extends CI_Model {
         $this->db->where('student_id', $student_id);
         $this->db->delete('student');
     }
-    
+
+    function delete_notification($id) {
+        $this->db->where('notification_id', $id);
+        $this->db->delete('notification');
+    }
+
+    function deleteTeacher($teacher_id) {
+        $this->db->where('teacher_id', $teacher_id);
+        $this->db->delete('teacher');
+    }
+
     function add_teacher($data) {
         $this->db->insert('teacher', $data);
     }
 
     function add_student($data) {
         $this->db->insert('student', $data);
-      
+    }
+    ///ATTENDANCE ////
+    function save_attendance($params) {
+        // Récupérer les paramètres
+
+        foreach ($params as $key) {
+            # code...
+            $student_id = $key['student_id'];
+            $class_id = $key['class_id'];
+            $section_id = $key['section_id'];
+            $timestamp = $key['timestamp'];
+           $result =  $this->db->get_where('attendance', array('student_id'=>$student_id,'class_id'=>$class_id,'section_id'=>$section_id,'timestamp'=>$timestamp))->row();
+           if($result)
+           {
+            $this->db->where(array('student_id'=>$student_id,'timestamp'=>$timestamp,'section_id'=>$section_id,'class_id'=>$class_id));
+            $this->db->update('attendance', $key);
+           }
+           else
+            $this->db->insert('attendance', $key);
+        }
+
+    }
+    ////MARKS//////
+    function getMarks($class_id,$section_id, $exam_id){
+        $this->db->select('m.mark_id, m.student_id, m.subject_id, m.mark_obtained as cc, m.test2 as ex , s.name as subject');
+        $this->db->join('subject as s', 's.subject_id = m.subject_id');
+        $this->db->where(array(
+                    'm.class_id' => $class_id,
+                    'm.section_id' => $section_id,
+                    'm.exam_id' => $exam_id
+                ));
+        return $data = $this->db->get('mark as m')->result();
+    }
+    function getStudentsMarks($class_id, $section_id, $exam_id){
+        $this->db->select('s.student_id, s.name, s.surname, s.sex, mm.moy');
+        $this->db->join('mark_moy as mm', 'mm.student_id = s.student_id');
+        $this->db->where(array(
+                    'mm.class_id' => $class_id,
+                    'mm.section_id' => $section_id,
+                    'mm.exam_id' => $exam_id
+                ));
+        return $data = $this->db->get('student as s')->result();
+    }
+    function getClassMarks($class_id,$section_id,$subject_id,$exam_id,$exam_type){
+        if($exam_type=="cc")
+            $this->db->select('student_id, mark_obtained');
+        else if($exam_type=="ex")
+            $this->db->select('student_id, test2');
+        $this->db->where(array(
+                    'class_id' => $class_id,
+                    'section_id' => $section_id,
+                    'subject_id' => $subject_id,
+                    'exam_id' => $exam_id
+                ));
+        return $data = $this->db->get('mark')->result();
     }
 
-    
+    function getHeadTeacher ($class_id) {
+        $this->db->select('t.name, t.surname, t.teacher_id');
+        $this->db->join('class as c', 'c.teacher_id = t.teacher_id');
+        $this->db->where(array(
+                    'c.class_id' => $class_id,
+                ));
+        return $data = $this->db->get('teacher as t')->row();
+
+    }
+    function getTopMoyPerClass($class_id,$section_id,$exam_id){
+        $this->db->select('s.student_id,s.name, s.surname, m.moy');
+        $this->db->join('student as s', 's.student_id = m.student_id');
+        $this->db->where(array(
+                    'm.class_id' => $class_id,
+                    'm.section_id' => $section_id,
+                    'm.exam_id' => $exam_id
+                ));
+        $this->db->order_by('m.moy desc');
+        return $data = $this->db->get('mark_moy as m')->result();
+    }
+
+
+
+    function insertMark($params) {
+        // Récupérer les paramètres
+
+        foreach ($params as $key) {
+            # code...
+            $student_id = $key['student_id'];
+            $exam_id = $key['exam_id'];
+            $class_id = $key['class_id'];
+            $section_id = $key['section_id'];
+           $result =  $this->db->get_where('mark', array('student_id'=>$student_id,'exam_id'=>$exam_id,'section_id'=>$section_id,'class_id'=>$class_id))->row();
+           if($result)
+           {
+            $this->db->where(array('student_id'=>$student_id,'exam_id'=>$exam_id,'section_id'=>$section_id,'class_id'=>$class_id));
+            $this->db->update('mark', $key);
+           }
+           else
+            $this->db->insert('mark', $key);
+        }
+
+    }
+
+    function getStudentInfosbYId ($student_id)
+    {
+        $this->db->select('e.*');
+                $this->db->where(array('student_id' => $student_id));
+        return $student = $this->db->get('enroll as e')->result();
+    }
+
+
+
     function update_teacher($teacher_id, $data) {
         $this->db->where('teacher_id', $teacher_id);
         $this->db->update('teacher', $data);
     }
-        
+
+    function update_students($student_id , $data){
+        $this->db->where('student_id',$student_id);
+        $this->db->update('teacher',$data);
+    }
+
+    function update_admin($admin_id, $data) {
+        $this->db->where('admin_id', $admin_id);
+        $this->db->update('admin', $data);
+    }
+
     function get_teacher_class ($teacher_id) {
         $this->db->select('c.name as classname');
                 $this->db->join('class as c', 'c.teacher_id = t.teacher_id');
@@ -139,6 +296,23 @@ class Crud_model extends CI_Model {
             return $row['name'];
     }
 
+    function get_classe($class_id) {
+        $query = $this->db->get_where('class', array('class_id' => $class_id));
+        $res = $query->result_array();
+        foreach ($res as $row)
+            return $row['name'];
+    }
+    function get_teacher_subject ($teacher_id,$class_id)
+    {
+        $query = $this->db->get_where('subject', array(
+            'teacher_id' => $teacher_id,
+            'class_id' => $class_id
+        ));
+        $res = $query->result_array();
+
+        return $res;
+    }
+
     function get_class_name_numeric($class_id) {
         $query = $this->db->get_where('class', array('class_id' => $class_id));
         $res = $query->result_array();
@@ -151,16 +325,87 @@ class Crud_model extends CI_Model {
         return $query->result_array();
     }
 
+
+    function addClasses ($data){
+
+        $this->db->insert('class', $data);
+        $class_id = $this->db->insert_id();
+
+        //insert in class cycle
+        $data['year '] = "2022-2023";
+        $data['class_id'] = $class_id;
+        $this->db->insert('class_cycle', $data);
+
+        //create a section by default
+
+        $data2['class_id']  =   $class_id;
+        $data2['name']      =   'A';
+        $data2['teacher_id'] = $data['teacher_id'];
+        $this->db->insert('section', $data2);
+
+    }
+
+    function addNotification ($data){
+        $this->db->insert('notification', $data);
+    }
+
+    function add_chat ($data){
+        $this->db->insert('chat', $data);
+    }
+
+    function get_cycle() {
+        $this->db->select('s.name, s.id');
+        $query = $this->db->get('school_fees as s');
+        return $query;
+    }
+
+    function get_message(){
+        $query = $this->db->get('message_thread');
+        return $query->result_array();
+    }
+    function get_message_infos(){
+        $query = $this->db->get('message');
+        return $query->result_array();
+    }
+
     function get_class_info($class_id) {
         $query = $this->db->get_where('class', array('class_id' => $class_id));
         return $query->result_array();
     }
 
+    function get_notification() {
+        $this->db->select('n.*');
+        $query = $this->db->get('notification as n');
+        return $query;
+    }
+
+    function get_chat() {
+        $this->db->select('c.*');
+        $query = $this->db->get('chat as c');
+        return $query;
+    }
+    function get_teachername($id) {
+        $this->db->select('t.name');
+        $query = $this->db->get_where('teacher as t' , array(
+            'teacher_id' => $id));
+
+        return $query->row();
+       
+    }
+ 
     //////////EXAMS/////////////
+    
     function get_exams($running_year) {
             $query = $this->db->get_where('exam' , array(
             'year' => $running_year));
-        
+
+        return $query->result_array();
+    }
+
+    function get_mark($running_year) {
+            $query = $this->db->get_where('mark' , array(
+            'year' => $running_year));
+
         return $query->result_array();
     }
 
@@ -224,6 +469,8 @@ class Crud_model extends CI_Model {
         $query = $this->db->get('settings');
         return $query->result_array();
     }
+
+
 
     ////////BACKUP RESTORE/////////
     function create_backup($type) {
@@ -910,4 +1157,5 @@ class Crud_model extends CI_Model {
         $exams = $this->db->where($match)->get('online_exam_result')->result_array();
         return $exams;
     }
+
 }
